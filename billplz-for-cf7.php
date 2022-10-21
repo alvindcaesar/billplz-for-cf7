@@ -32,6 +32,7 @@ if (!class_exists("Billplz_CF7")) {
         self::$instance = new Billplz_CF7();
         self::$instance->define_constants();
         self::$instance->includes();
+        self::$instance->init = new Billplz_CF7_Init();
       }
       return self::$instance;
     }
@@ -47,6 +48,8 @@ if (!class_exists("Billplz_CF7")) {
 
     private function includes()
     {
+      require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/class-admin-menu.php";
+      require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";
     }
   }
 }
