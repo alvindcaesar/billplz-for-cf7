@@ -24,15 +24,16 @@
 
     $billplz_cf7_table = new Billplz_CF7_Payment_List();
     echo "<br>";
+    $billplz_cf7_table->views();
     // Search function
     echo "<form method='post' name='billplz_search_payment' action='".$_SERVER['PHP_SELF']. "?page=billplz-cf7&tab=payments'>";
     $billplz_cf7_table->prepare_items();
-    $billplz_cf7_table->search_box( "Search Customer or Bill", "payment-search-id");
+    $billplz_cf7_table->search_box( "Search Customer or Bill ID", "payment-search-id");
     $billplz_cf7_table->display();
     echo "</form>";
   
   } elseif ($active_tab == "general-settings") {
-      echo "<p>General Settings goes here</p>";
+      require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/views/general-settings-page.php";
   } else {
       echo "<p>API Settings goes here</p>";
   } ?>
