@@ -9,9 +9,9 @@ class Billplz_CF7_Form_Process
 
     public function process_data($contact_form)
     {
-        $title = $contact_form->title;
+        $id = $contact_form->id;
 
-        if ($title === "Payment") {
+        if (get_option("billplz_cf7_general_settings")["billplz_cf7_form_select"] == $id) {
             $submission = WPCF7_Submission::get_instance();
 
             if ($submission) {
