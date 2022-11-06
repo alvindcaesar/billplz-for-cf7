@@ -16,7 +16,7 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   }
 
   // Get table data
-  private function get_table_data( $search_term = "" )
+  private function get_table_data( $search_term = "", $status = "" )
   {
     global $wpdb;
 
@@ -25,9 +25,19 @@ class Billplz_CF7_Payment_List extends WP_List_Table
         "SELECT * from {$this->get_db_name()} WHERE name LIKE '%$search_term%' OR transaction_id LIKE '%$search_term%'"
       );
     } else {
-      $payment_results = $wpdb->get_results(
-        "SELECT * from {$this->get_db_name()}"
-      );
+      if ($status == "completed") {
+        $payment_results = $wpdb->get_results(
+          "SELECT * from {$this->get_db_name()} WHERE status= '{$status}'"
+        );
+      } elseif ($status == "pending"){
+        $payment_results = $wpdb->get_results(
+          "SELECT * from {$this->get_db_name()} WHERE status= '{$status}'"
+        );
+      } else {
+        $payment_results = $wpdb->get_results(
+          "SELECT * from {$this->get_db_name()}"
+        );
+      }
     }
 
     $payment_array = array();
@@ -39,8 +49,8 @@ class Billplz_CF7_Payment_List extends WP_List_Table
           "form"           => $payment_data->form_title . " (ID: ".$payment_data->form_id.")",
           "amount"         => $payment_data->amount,
           "transaction_id" => $payment_data->transaction_id,
-          "date"           => date('F j, Y \a\t\ g:i a', strtotime($payment_data->created_at)),
-          "status"         => $payment_data->status
+          "date"           => nl2br("Created at \n ".date('F j, Y \a\t\ g:i a', strtotime($payment_data->created_at))." "),
+          "status"         => ucfirst($payment_data->status)
         );
       }
     }
@@ -81,8 +91,9 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     $primary  = 'id';
     $this->_column_headers = array( $columns, $hidden, $sortable, $primary );
 
+    $status = isset($_GET['status']) ? trim($_GET['status']) : "";
     $search_term = isset($_POST['s']) ? trim($_POST['s']) : "";
-    $this->table_data = $this->get_table_data( $search_term );
+    $this->table_data = $this->get_table_data( $search_term, $status );
 
     
     $per_page = 4;
@@ -147,5 +158,36 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   public function bulk_action_notice($arg, $count)
   {
     printf('<div id="message" class="updated notice is-dismissable"><p>' . __('%d %s deleted.', BILLPLZ_CF7_TEXT_DOMAIN) . '</p></div>', $arg, $count);
+  }
+
+  protected function get_views() 
+  { 
+    $completed = $this->get_status_count("completed");
+    $pending   = $this->get_status_count("pending");
+
+    $status_links = array(
+        "all"       => __("<a class='".((! isset($_GET['status'])) ? 'current' : '')."' href='".remove_query_arg("status")."'>All <span class='count'>(".($completed + $pending).")</span></a>", BILLPLZ_CF7_TEXT_DOMAIN),
+
+        "completed" => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'completed')) ? 'current' : '')."' href='".add_query_arg("status", "completed")."'>Completed <span class='count'>(".$completed.")</span></a>", BILLPLZ_CF7_TEXT_DOMAIN),
+
+        "pending"   => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'pending')) ? 'current' : '')."' href='".add_query_arg("status", "pending")."'>Pending <span class='count'>(".$pending.")</span></a>", BILLPLZ_CF7_TEXT_DOMAIN)
+    );
+    return $status_links;
+  }
+
+  public function get_status_count($status)
+  {
+    global $wpdb;
+
+    if ("completed" === $status) {
+      $query = $wpdb->get_results(
+        "SELECT * from {$this->get_db_name()} WHERE status= '{$status}' "
+      );
+    } else {
+      $query = $wpdb->get_results(
+        "SELECT * from {$this->get_db_name()} WHERE status= '{$status}' "
+      );
+    }
+    return count($query);
   }
 }
