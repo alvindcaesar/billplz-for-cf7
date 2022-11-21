@@ -1,6 +1,6 @@
 <?php
 
-require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/lib/class-wp-list-table.php";
+require_once BCF7_PLUGIN_PATH . "includes/lib/class-wp-list-table.php";
 
 class Billplz_CF7_Payment_List extends WP_List_Table
 {
@@ -11,7 +11,7 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   private function get_db_name()
   {
     global $wpdb;
-    $db = $wpdb->prefix . "billplz_cf7_payment";
+    $db = $wpdb->prefix . "bcf7_payment";
     return $db;
   }
 
@@ -77,7 +77,7 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   // Display message when there are no records.
   public function no_items()
   {
-    _e( 'No payment records.', BILLPLZ_CF7_TEXT_DOMAIN );
+    _e( 'No payment records.', BCF7_TEXT_DOMAIN );
   }
 
   // Bind table with columns, data and etc
@@ -96,7 +96,7 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     $this->table_data = $this->get_table_data( $search_term, $status );
 
     
-    $per_page = 4;
+    $per_page = 50;
     $current_page = $this->get_pagenum();
     $total_items = count($this->table_data);
     $this->set_pagination_args( array(
@@ -155,9 +155,9 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     }
   }
 
-  public function bulk_action_notice($arg, $count)
+  public function bulk_action_notice($count, $text)
   {
-    printf('<div id="message" class="updated notice is-dismissable"><p>' . __('%d %s deleted.', BILLPLZ_CF7_TEXT_DOMAIN) . '</p></div>', $arg, $count);
+    printf('<div id="message" class="updated notice is-dismissable"><p>' . __('%d %s deleted.', BCF7_TEXT_DOMAIN) . '</p></div>', $count, $text);
   }
 
   protected function get_views() 
@@ -166,11 +166,11 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     $pending   = $this->get_status_count("pending");
 
     $status_links = array(
-        "all"       => __("<a class='".((! isset($_GET['status'])) ? 'current' : '')."' href='".remove_query_arg("status")."'>All <span class='count'>(".($completed + $pending).")</span></a>", BILLPLZ_CF7_TEXT_DOMAIN),
+        "all"       => __("<a class='".((! isset($_GET['status'])) ? 'current' : '')."' href='".remove_query_arg("status")."'>All <span class='count'>(".($completed + $pending).")</span></a>", BCF7_TEXT_DOMAIN),
 
-        "completed" => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'completed')) ? 'current' : '')."' href='".add_query_arg("status", "completed")."'>Completed <span class='count'>(".$completed.")</span></a>", BILLPLZ_CF7_TEXT_DOMAIN),
+        "completed" => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'completed')) ? 'current' : '')."' href='".add_query_arg("status", "completed")."'>Completed <span class='count'>(".$completed.")</span></a>", BCF7_TEXT_DOMAIN),
 
-        "pending"   => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'pending')) ? 'current' : '')."' href='".add_query_arg("status", "pending")."'>Pending <span class='count'>(".$pending.")</span></a>", BILLPLZ_CF7_TEXT_DOMAIN)
+        "pending"   => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'pending')) ? 'current' : '')."' href='".add_query_arg("status", "pending")."'>Pending <span class='count'>(".$pending.")</span></a>", BCF7_TEXT_DOMAIN)
     );
     return $status_links;
   }
