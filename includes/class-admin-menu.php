@@ -6,7 +6,7 @@ class Billplz_CF7_Admin_Menu
 {
   public function __construct()
   {
-    add_action("admin_menu", [$this, "add_submenu"]);
+    add_action("admin_menu", array($this, "add_submenu"));
   }
 
   /**
@@ -20,7 +20,7 @@ class Billplz_CF7_Admin_Menu
       __("Billplz", "billplz-for-cf7"),
       "manage_options",
       "billplz-cf7",
-      [$this, "display_callback"]
+      array($this, "display_callback")
     );
   }
 
@@ -29,7 +29,7 @@ class Billplz_CF7_Admin_Menu
    */
   public function display_callback()
   {
-    require_once BILLPLZ_CF7_PLUGIN_PATH .
+    require_once BCF7_PLUGIN_PATH .
       "includes/views/page-callback.php";
   }
 }
