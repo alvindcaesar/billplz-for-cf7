@@ -39,25 +39,26 @@ if (!class_exists("Billplz_CF7")) {
 
         private function define_constants()
         {
-            define("BILLPLZ_CF7_PLUGIN_PATH", plugin_dir_path(__FILE__));
-            define("BILLPLZ_CF7_PLUGIN_URL", plugin_dir_url(__FILE__));
-            define("BILLPLZ_CF7_PLUGIN_FILE", plugin_basename(__FILE__));
-            define("BILLPLZ_CF7_TEXT_DOMAIN", "billplz-for-cf7");
-            define("BILLPLZ_CF7_PLUGIN_VERSION", "0.1.0");
+            define("BCF7_PLUGIN_PATH", plugin_dir_path(__FILE__));
+            define("BCF7_PLUGIN_URL", plugin_dir_url(__FILE__));
+            define("BCF7_PLUGIN_FILE", plugin_basename(__FILE__));
+            define("BCF7_TEXT_DOMAIN", "billplz-for-cf7");
+            define("BCF7_PLUGIN_VERSION", "0.1.0");
         }
 
         private function includes()
         {
-            require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/class-admin-menu.php";
-            require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/class-form-process.php";
-            require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/class-general-settings.php";
-            require_once BILLPLZ_CF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";
-
+            require_once BCF7_PLUGIN_PATH . "includes/class-admin-menu.php";
+            require_once BCF7_PLUGIN_PATH . "includes/class-form-process.php";
+            require_once BCF7_PLUGIN_PATH . "includes/class-api-settings.php";
+            require_once BCF7_PLUGIN_PATH . "includes/class-general-settings.php";
+            require_once BCF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";
+            require_once BCF7_PLUGIN_PATH . "includes/helpers/billplz-cf7-helper.php";
         }
     }
 }
 
-add_action("plugins_loaded", ["Billplz_CF7", "instance"]);
+add_action("plugins_loaded", array("Billplz_CF7", "instance"));
 
 require_once plugin_dir_path(__FILE__) . "includes/class-payment-database.php";
 register_activation_hook(__FILE__, array("Billplz_CF7_Payment_DB", "create_db"));
