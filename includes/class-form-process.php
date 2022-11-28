@@ -93,7 +93,7 @@ class Billplz_CF7_Form_Process
 
     public function success_page()
     {
-        if (empty($_GET)) return;
+        if (isset($_GET['post']) && isset($_GET['action'])) return;
         
         $payment_id = $_GET['payment-id'];
 
