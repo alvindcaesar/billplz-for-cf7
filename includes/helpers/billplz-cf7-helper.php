@@ -22,8 +22,8 @@ function bcf7_get_mode()
 
 function bcf7_get_url()
 {
-  $live    = "https://www.billplz.com/api/v3/bills";
-  $sandbox = "https://www.billplz-sandbox.com/api/v3/bills";
+  $live    = "https://www.billplz.com";
+  $sandbox = "https://www.billplz-sandbox.com";
 
   $url = ("Live" == bcf7_get_mode()) ? $live : $sandbox;
 
