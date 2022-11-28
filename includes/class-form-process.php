@@ -5,7 +5,8 @@ class Billplz_CF7_Form_Process
     public function __construct()
     {
         add_action('wpcf7_before_send_mail', array($this, 'process_data'));
-        // add_action('wp_footer', array($this, 'redirect'));
+        add_filter( 'wpcf7_load_js', '__return_false' );
+        add_shortcode('bcf7_confirm', array($this, 'success_page'));
 
     }
 
@@ -28,27 +29,14 @@ class Billplz_CF7_Form_Process
                 $mode           = bcf7_get_mode();
                 $status         = 'Pending';
 
-                $this->record_data($form_id, $form_title, $name, $phone, $email, $amount, $transaction_id, $mode, $status);
+                $payment_id = $this->record_data($form_id, $form_title, $name, $phone, $email, $amount, $transaction_id, $mode, $status);
 
-                $this->process_payment($name, $email, $amount, $status);
+                $this->process_payment($name, $email, $amount, $status, $payment_id);
             }
 
         }
     }
-/**
- * Undocumented function
- *
- * @param [type] $form_id
- * @param [type] $form_title
- * @param [type] $name
- * @param [type] $phone
- * @param [type] $email
- * @param [type] $amount
- * @param [type] $transaction_id
- * @param [type] $mode
- * @param [type] $status
- * @return void
- */
+
     public function record_data($form_id, $form_title, $name, $phone, $email, $amount, $transaction_id, $mode, $status)
     {
         global $wpdb;
@@ -68,37 +56,86 @@ class Billplz_CF7_Form_Process
             'created_at'     => current_time('mysql'),
             ),
         );
+
+        return $wpdb->insert_id;
     }
 
-    public function process_payment($name, $email, $amount, $description)
+    public function process_payment($name, $email, $amount, $description, $payment_id)
     {
-        $url = 'https://www.billplz-sandbox.com/api/v3/bills';
-        $api_key = base64_encode(bcf7_api_option("bcf7_sandbox_secret_key"));
-
         $args = array(
           'headers' => array(
-            'Authorization' => 'Basic '. $api_key . ':',
+            'Authorization' => 'Basic '. bcf7_get_api_key() . ':',
             ),
             'body' => array(
-              'collection_id' => bcf7_api_option("bcf7_sandbox_collection_id"),
+              'collection_id' => bcf7_get_collection_id(),
               'email' => $email,
               'name' => $name,
               'amount' => $amount * 100,
-              'redirect_url' => site_url(),
+              'redirect_url' => add_query_arg(array('payment-id' => $payment_id), site_url("?page_id=".bcf7_general_option('bcf7_redirect_page')."") ),
               'callback_url' => 'https://webhook.site/778c289e-0247-4c98-865f-5dc0a922f1e9',
               'description' => $description
             )
          );
       
-        $response = wp_remote_post($url, $args);
-        $apiBody = json_decode(wp_remote_retrieve_body($response));
+        $response = wp_remote_post( bcf7_get_url() . "/api/v3/bills", $args );
+        $apiBody = json_decode( wp_remote_retrieve_body($response) );
         $bill_url = $apiBody->url;
-        header("Location: $bill_url");
-        die;
+    
+        $content  = '<div>';
+        $content .= '<p class="text-center">Redirecting to Billplz...</p>';
+        $content .= '</div>';
+        $content .= '<script>window.location.replace("' . $bill_url . '");</script>';
+
+        $allowed_tags = array('div' => array(), 'p' => array(), 'script' => array());
+
+        echo wp_kses($content, $allowed_tags);
     }
 
-    public function redirect($url)
+    public function success_page()
     {
+        if (empty($_GET)) return;
         
+        $payment_id = $_GET['payment-id'];
+
+        $url         = htmlentities($_SERVER['QUERY_STRING']);
+        parse_str(html_entity_decode($url), $query);
+
+        $transaction_id = $query['billplz']['id'];
+        $paid_at = $query['billplz']['paid_at'];
+        $bill_url = bcf7_get_url()."/bills/".$transaction_id;
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . "bcf7_payment";
+
+        if (isset($_GET['payment-id']) and ('true' == $query['billplz']['paid'])) {
+            echo "<h2>Thank you for your payment!</h2>";
+            echo "<p>Payment Status: Completed</p>";
+            echo "<p>Transaction ID: $transaction_id</p>";
+
+            
+            $wpdb->update( $table_name, array( 
+                'status' => 'completed', 
+                'transaction_id' => $transaction_id, 
+                'paid_at' => $paid_at,
+                'bill_url' => $bill_url
+                ), 
+                array( 'ID' => $payment_id ) 
+            );
+
+        } else {
+            echo "<h2>Sorry, your payment was unsuccessful</h2>";
+            echo "<p>Payment Status: Failed.</p>";
+            echo "<p>Please repay the bill <a href=".bcf7_get_url().'/bills/'.$transaction_id.">here</a></p>";
+
+            $wpdb->update( $table_name, array( 
+                'transaction_id' => $transaction_id, 
+                'paid_at' => '0000-00-00 00:00:00',
+                'bill_url' => $bill_url
+                ), 
+                array( 'ID' => $payment_id ) 
+            );
+        }
+
+
     }
 }
