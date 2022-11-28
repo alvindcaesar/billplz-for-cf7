@@ -35,7 +35,7 @@ class Billplz_CF7_Payment_List extends WP_List_Table
         );
       } else {
         $payment_results = $wpdb->get_results(
-          "SELECT * from {$this->get_db_name()}"
+          "SELECT * from {$this->get_db_name()} ORDER BY created_at DESC"
         );
       }
     }
@@ -48,9 +48,10 @@ class Billplz_CF7_Payment_List extends WP_List_Table
           "customer"       => $payment_data->name,
           "form"           => $payment_data->form_title . " (ID: ".$payment_data->form_id.")",
           "amount"         => $payment_data->amount,
-          "transaction_id" => $payment_data->transaction_id,
-          "date"           => nl2br("Created at \n ".date('F j, Y \a\t\ g:i a', strtotime($payment_data->created_at))." "),
-          "status"         => ucfirst($payment_data->status)
+          "transaction_id" => "<a href=".$payment_data->bill_url." target='_blank'>$payment_data->transaction_id</a>",
+          "created_at"     => nl2br("Submitted on \n ".date('F j, Y \a\t\ g:i a', strtotime($payment_data->created_at))." "),
+          "paid_at"        => ("0000-00-00 00:00:00" != $payment_data->paid_at) ? (nl2br("Paid on \n ".date('F j, Y \a\t\ g:i a', strtotime($payment_data->paid_at))." ")) : "-",
+          "status"         => ucfirst($payment_data->status),
         );
       }
     }
@@ -62,12 +63,13 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   {
       $columns = array(
           "cb"             => "<input type='checkbox' />",
-          "id"             => "ID",
+          "id"             => "Payment ID",
           "customer"       => "Customer",
           "form"           => "Form Name",
           "amount"         => "Amount (RM)",
           "transaction_id" => "Bill ID",
-          "date"           => "Date",
+          "created_at"     => "Submitted",
+          "paid_at"        => "Paid",
           "status"         => "Payment Status",
       );
 
@@ -115,7 +117,8 @@ class Billplz_CF7_Payment_List extends WP_List_Table
       case 'form':
       case 'amount':
       case 'transaction_id':
-      case 'date':
+      case 'created_at':
+      case 'paid_at':
       case 'status':
         return $item[$column_name];
     }
@@ -134,7 +137,8 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   public function get_bulk_actions()
   {
     $actions = array(
-      "delete" => "Delete"
+      "delete" => "Delete",
+      "mark_as_completed" => "Mark as Completed"
     );
     return $actions;
   }
@@ -142,22 +146,36 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   public function process_bulk_action()
   {
     $action = $this->current_action();
-    if ("delete" === $action) {
-      $delete_ids = esc_sql( $_POST['payment_id'] );
 
-      foreach ($delete_ids as $delete_id) {
+    if ("delete" === $action) {
+      $list_ids = esc_sql( $_POST['payment_id'] );
+
+      foreach ($list_ids as $id) {
         global $wpdb;
-        $wpdb->query("DELETE FROM {$this->get_db_name()} WHERE id= {$delete_id} ");
+        $wpdb->query("DELETE FROM {$this->get_db_name()} WHERE id= {$id} ");
       }
-      $text = (count($delete_ids) > 1) ? "payments" : "payment";
-      add_action( 'admin_notices', $this->bulk_action_notice( count($delete_ids), $text ) );
+      $text = (count($list_ids) > 1) ? "payments" : "payment";
+      add_action( 'admin_notices', $this->bulk_action_notice( count($list_ids), $text, "deleted" ) );
+      $this->table_data;
+    }
+
+    if ("mark_as_completed" === $action) {
+      $list_ids = esc_sql( $_POST['payment_id'] );
+
+      foreach ($list_ids as $id) {
+        global $wpdb;
+        $wpdb->update( $this->get_db_name(), array( 'status' => 'completed'), array( 'ID' => $id ) );
+      }
+
+      $text = (count($list_ids) > 1) ? "payments" : "payment";
+      add_action( 'admin_notices', $this->bulk_action_notice( count($list_ids), $text, "updated" ) );
       $this->table_data;
     }
   }
 
-  public function bulk_action_notice($count, $text)
+  public function bulk_action_notice($count, $text, $status)
   {
-    printf('<div id="message" class="updated notice is-dismissable"><p>' . __('%d %s deleted.', BCF7_TEXT_DOMAIN) . '</p></div>', $count, $text);
+    printf('<div id="message" class="updated notice is-dismissable"><p>' . __('%d %s %s.', BCF7_TEXT_DOMAIN) . '</p></div>', $count, $text, $status);
   }
 
   protected function get_views() 
