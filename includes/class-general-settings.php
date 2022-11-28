@@ -48,7 +48,7 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
 
       add_settings_field(
         "bcf7_redirect_page",
-        "Choose a redirect URL",
+        "Payment Confirmation Page",
         array( $this, 'bcf7_redirect_page_callback' ),
         "bcf7_general_settings",
         "bcf7_general_section",
