@@ -5,6 +5,11 @@
  */
 class Billplz_CF7_Payment_DB
 {
+    public static function up()
+    {
+        self::create_db();
+    }
+
     public static function create_db()
     {
         global $wpdb;
@@ -23,10 +28,12 @@ class Billplz_CF7_Payment_DB
             phone varchar (60) NOT NULL DEFAULT '',
             amount decimal (6,2) unsigned NOT NULL DEFAULT 0,
             transaction_id varchar (60) NOT NULL DEFAULT '',
+            bill_url varchar (256) DEFAULT NULL,
             email varchar (60) NOT NULL DEFAULT '',
             mode varchar (60) NOT NULL DEFAULT '',
             status varchar (60) NOT NULL DEFAULT '',
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
+            paid_at datetime DEFAULT NULL,
             PRIMARY KEY  (id)
           ) $charsetCollate";
 
