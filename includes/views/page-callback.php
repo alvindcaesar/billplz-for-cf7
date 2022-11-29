@@ -20,7 +20,7 @@
 
   <?php if ($active_tab == "payments") {
     require_once BCF7_PLUGIN_PATH .
-    "includes/class-billplz-cf7-payment-list.php";
+    "includes/admin/class-billplz-cf7-payment-list.php";
 
     $bcf7_table = new Billplz_CF7_Payment_List();
     echo "<br>";

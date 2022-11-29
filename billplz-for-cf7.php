@@ -48,10 +48,10 @@ if (!class_exists("Billplz_CF7")) {
 
         private function includes()
         {
-            require_once BCF7_PLUGIN_PATH . "includes/class-admin-menu.php";
-            require_once BCF7_PLUGIN_PATH . "includes/class-form-process.php";
-            require_once BCF7_PLUGIN_PATH . "includes/class-api-settings.php";
-            require_once BCF7_PLUGIN_PATH . "includes/class-general-settings.php";
+            require_once BCF7_PLUGIN_PATH . "includes/admin/class-admin-menu.php";
+            require_once BCF7_PLUGIN_PATH . "includes/controller/class-form-process.php";
+            require_once BCF7_PLUGIN_PATH . "includes/settings/class-api-settings.php";
+            require_once BCF7_PLUGIN_PATH . "includes/settings/class-general-settings.php";
             require_once BCF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";
             require_once BCF7_PLUGIN_PATH . "includes/helpers/billplz-cf7-helper.php";
         }
@@ -60,5 +60,5 @@ if (!class_exists("Billplz_CF7")) {
 
 add_action("plugins_loaded", array("Billplz_CF7", "instance"));
 
-require_once plugin_dir_path(__FILE__) . "includes/class-payment-database.php";
+require_once plugin_dir_path(__FILE__) . "includes/database/class-payment-database.php";
 register_activation_hook(__FILE__, array("Billplz_CF7_Payment_DB", "up"));

@@ -108,10 +108,11 @@ class Billplz_CF7_Form_Process
         $table_name = $wpdb->prefix . "bcf7_payment";
 
         if (isset($_GET['payment-id']) and ('true' == $query['billplz']['paid'])) {
-            echo "<h2>Thank you for your payment!</h2>";
-            echo "<p>Payment Status: Completed</p>";
-            echo "<p>Transaction ID: $transaction_id</p>";
-
+            ?>
+                <h2>Thank you for your payment!</h2>
+                <p>Payment Status: Completed</p>
+                <p>Bill ID: <a href="<?php echo esc_url(bcf7_get_url().'/bills/'.$transaction_id); ?>" target="_blank"><?php echo sanitize_text_field($transaction_id); ?></a></p>
+            <?php
             
             $wpdb->update( $table_name, array( 
                 'status' => 'completed', 
@@ -123,9 +124,11 @@ class Billplz_CF7_Form_Process
             );
 
         } else {
-            echo "<h2>Sorry, your payment was unsuccessful</h2>";
-            echo "<p>Payment Status: Failed.</p>";
-            echo "<p>Please repay the bill <a href=".bcf7_get_url().'/bills/'.$transaction_id.">here</a></p>";
+            ?>
+                <h2>Sorry, your payment was unsuccessful</h2>
+                <p>Payment Status: Failed</p>
+                <p>Please repay the bill <a href="<?php echo esc_url(bcf7_get_url().'/bills/'.$transaction_id); ?>" target="_blank">here</a></p>
+            <?php
 
             $wpdb->update( $table_name, array( 
                 'transaction_id' => $transaction_id, 
@@ -135,7 +138,5 @@ class Billplz_CF7_Form_Process
                 array( 'ID' => $payment_id ) 
             );
         }
-
-
     }
 }
