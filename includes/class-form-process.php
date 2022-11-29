@@ -135,7 +135,5 @@ class Billplz_CF7_Form_Process
                 array( 'ID' => $payment_id ) 
             );
         }
-
-
     }
 }
