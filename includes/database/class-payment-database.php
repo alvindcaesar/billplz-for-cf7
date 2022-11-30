@@ -1,8 +1,5 @@
 <?php
-/**
- * Column neeed to create:
- * id, data,amount, transaction_id,email, mode, status, completed_at, created_at, updated at
- */
+
 class Billplz_CF7_Payment_DB
 {
     public static function up()
