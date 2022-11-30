@@ -1,7 +1,5 @@
 <?php
 
-defined("WPINC") or die();
-
 class Billplz_CF7_Admin_Menu
 {
   public function __construct()
