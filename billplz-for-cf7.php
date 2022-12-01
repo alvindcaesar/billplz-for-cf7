@@ -50,6 +50,7 @@ if (!class_exists("Billplz_CF7")) {
         {
             require_once BCF7_PLUGIN_PATH . "includes/admin/class-admin-menu.php";
             require_once BCF7_PLUGIN_PATH . "includes/controller/class-form-process.php";
+            require_once BCF7_PLUGIN_PATH . "includes/controller/class-shortcodes.php";
             require_once BCF7_PLUGIN_PATH . "includes/settings/class-api-settings.php";
             require_once BCF7_PLUGIN_PATH . "includes/settings/class-general-settings.php";
             require_once BCF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";

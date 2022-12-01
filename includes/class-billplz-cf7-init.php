@@ -10,6 +10,7 @@ class Billplz_CF7_Init
             $bcf7_form_process = new Billplz_CF7_Form_Process(),
             $bcf7_general_settings = new Billplz_CF7_General_Settings(),
             $bcf7_api_settings = new Billplz_CF7_API_Settings(),
+            $bcf7_shortcodes = Billplz_CF7_Shortcodes::init()
         );
     }
 }

@@ -5,6 +5,8 @@
  * under /wp-admin/includes/
  */
 
+namespace Billplz_CF7\Includes\Lib;
+
 /**
  * Administration API: WP_List_Table class
  *
