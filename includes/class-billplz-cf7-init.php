@@ -11,8 +11,8 @@ class Billplz_CF7_Init
     public function include_classes()
     {
         require_once BCF7_PLUGIN_PATH . "includes/admin/class-admin-menu.php";
-        require_once BCF7_PLUGIN_PATH . "includes/controller/class-form-process.php";
-        require_once BCF7_PLUGIN_PATH . "includes/controller/class-shortcodes.php";
+        require_once BCF7_PLUGIN_PATH . "includes/payments/class-form-process.php";
+        require_once BCF7_PLUGIN_PATH . "includes/payments/class-shortcodes.php";
         require_once BCF7_PLUGIN_PATH . "includes/settings/class-api-settings.php";
         require_once BCF7_PLUGIN_PATH . "includes/settings/class-general-settings.php";
         require_once BCF7_PLUGIN_PATH . "includes/helpers/billplz-cf7-helper.php";
