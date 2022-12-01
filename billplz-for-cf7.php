@@ -17,7 +17,8 @@ defined("WPINC") or die();
 
 if (!class_exists("Billplz_CF7")) {
     /**
-     * Main singleton class for the Billplz for Contact Form 7 plugin.
+     * Main singleton class for the Billplz for Contact Form 7 
+     * plugin.
      */
     class Billplz_CF7
     {
@@ -48,13 +49,7 @@ if (!class_exists("Billplz_CF7")) {
 
         private function includes()
         {
-            require_once BCF7_PLUGIN_PATH . "includes/admin/class-admin-menu.php";
-            require_once BCF7_PLUGIN_PATH . "includes/controller/class-form-process.php";
-            require_once BCF7_PLUGIN_PATH . "includes/controller/class-shortcodes.php";
-            require_once BCF7_PLUGIN_PATH . "includes/settings/class-api-settings.php";
-            require_once BCF7_PLUGIN_PATH . "includes/settings/class-general-settings.php";
             require_once BCF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";
-            require_once BCF7_PLUGIN_PATH . "includes/helpers/billplz-cf7-helper.php";
         }
     }
 }

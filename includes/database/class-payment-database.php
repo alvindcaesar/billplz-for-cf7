@@ -23,7 +23,7 @@ class Billplz_CF7_Payment_DB
             form_title varchar (60) NOT NULL DEFAULT '',
             name varchar (60) NOT NULL DEFAULT '',
             phone varchar (60) NOT NULL DEFAULT '',
-            amount decimal (6,2) unsigned NOT NULL DEFAULT 0,
+            amount float (10,2) unsigned NOT NULL DEFAULT 0,
             transaction_id varchar (60) NOT NULL DEFAULT '',
             bill_url varchar (256) DEFAULT NULL,
             email varchar (60) NOT NULL DEFAULT '',
