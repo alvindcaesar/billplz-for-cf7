@@ -17,7 +17,8 @@ defined("WPINC") or die();
 
 if (!class_exists("Billplz_CF7")) {
     /**
-     * Main singleton class for the Billplz for Contact Form 7 plugin.
+     * Main singleton class for the Billplz for Contact Form 7 
+     * plugin.
      */
     class Billplz_CF7
     {
