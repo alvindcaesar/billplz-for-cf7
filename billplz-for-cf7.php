@@ -49,7 +49,6 @@ if (!class_exists("Billplz_CF7")) {
         private function includes()
         {
             require_once BCF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";
-            require_once BCF7_PLUGIN_PATH . "includes/helpers/billplz-cf7-helper.php";
         }
     }
 }
