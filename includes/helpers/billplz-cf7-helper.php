@@ -49,3 +49,13 @@ function bcf7_get_collection_id()
 
   return $collection_id;
 }
+
+function bcf7_get_xsignature()
+{
+  $live    = bcf7_api_option("bcf7_live_xsignature_key");
+  $sandbox = bcf7_api_option("bcf7_sandbox_xsignature_key");
+
+  $xsignature = ("Live" == bcf7_get_mode()) ? $live : $sandbox;
+
+  return $xsignature;
+}
