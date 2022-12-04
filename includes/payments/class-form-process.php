@@ -25,11 +25,12 @@ class Billplz_CF7_Form_Process
                 $phone          = $posted_data['bcf7-phone'];
                 $transaction_id = '';
                 $mode           = bcf7_get_mode();
-                $status         = 'Pending';
+                $status         = 'pending';
 
                 $payment_id = $this->record_data($form_id, $form_title, $name, $phone, $email, $amount, $transaction_id, $mode, $status);
 
-                $this->process_payment($name, $email, $amount, $status, $payment_id);
+                $description = "Payment for $form_title";
+                $this->process_payment($name, $email, $amount, $description, $payment_id);
             }
 
         }
