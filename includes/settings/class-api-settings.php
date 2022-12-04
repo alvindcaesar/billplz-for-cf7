@@ -83,7 +83,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
         {
             ?>
                 <input class="regular-text" type="text" name="bcf7_api_options[bcf7_live_secret_key]" id="bcf7_live_secret_key"
-                value="<?php echo isset(self::$options['bcf7_live_secret_key']) ? self::$options['bcf7_live_secret_key'] : ""; ?>"
+                value="<?php echo esc_attr(isset(self::$options['bcf7_live_secret_key']) ? self::$options['bcf7_live_secret_key'] : ""); ?>"
                 >
             <?php
         }
@@ -92,7 +92,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
         {
             ?>
                 <input class="regular-text" type="text" name="bcf7_api_options[bcf7_live_collection_id]" id="bcf7_live_collection_id"
-                value="<?php echo isset(self::$options['bcf7_live_collection_id']) ? self::$options['bcf7_live_collection_id'] : ""; ?>"
+                value="<?php echo esc_attr(isset(self::$options['bcf7_live_collection_id']) ? self::$options['bcf7_live_collection_id'] : ""); ?>"
                 >
             <?php
         }
@@ -101,7 +101,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
         {
             ?>
                 <input class="regular-text" type="text" name="bcf7_api_options[bcf7_live_xsignature_key]" id="bcf7_live_xsignature_key"
-                value="<?php echo isset(self::$options['bcf7_live_xsignature_key']) ? self::$options['bcf7_live_xsignature_key'] : ""; ?>"
+                value="<?php echo esc_attr(isset(self::$options['bcf7_live_xsignature_key']) ? self::$options['bcf7_live_xsignature_key'] : ""); ?>"
                 >
             <?php
         }
@@ -110,7 +110,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
         {
             ?>
                 <input class="regular-text" type="text" name="bcf7_api_options[bcf7_sandbox_secret_key]" id="bcf7_sandbox_secret_key"
-                value="<?php echo isset(self::$options['bcf7_sandbox_secret_key']) ? self::$options['bcf7_sandbox_secret_key'] : ""; ?>"
+                value="<?php echo esc_attr(isset(self::$options['bcf7_sandbox_secret_key']) ? self::$options['bcf7_sandbox_secret_key'] : ""); ?>"
                 >
             <?php
         }
@@ -119,7 +119,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
         {
             ?>
                 <input class="regular-text" type="text" name="bcf7_api_options[bcf7_sandbox_collection_id]" id="bcf7_sandbox_collection_id"
-                value="<?php echo isset(self::$options['bcf7_sandbox_collection_id']) ? self::$options['bcf7_sandbox_collection_id'] : ""; ?>"
+                value="<?php echo esc_attr(isset(self::$options['bcf7_sandbox_collection_id']) ? self::$options['bcf7_sandbox_collection_id'] : ""); ?>"
                 >
             <?php
         }
@@ -128,7 +128,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
         {
             ?>
                 <input class="regular-text" type="text" name="bcf7_api_options[bcf7_sandbox_xsignature_key]" id="bcf7_sandbox_xsignature_key"
-                value="<?php echo isset(self::$options['bcf7_sandbox_xsignature_key']) ? self::$options['bcf7_sandbox_xsignature_key'] : ""; ?>"
+                value="<?php echo esc_attr(isset(self::$options['bcf7_sandbox_xsignature_key']) ? self::$options['bcf7_sandbox_xsignature_key'] : ""); ?>"
                 >
             <?php
         }
