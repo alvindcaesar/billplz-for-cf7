@@ -21,18 +21,14 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     global $wpdb;
 
     if (! empty($search_term) ) {
-      $payment_results = $wpdb->get_results(
-        "SELECT * from {$this->get_db_name()} WHERE name LIKE '%$search_term%' OR transaction_id LIKE '%$search_term%'"
-      );
+      $wild = "%";
+      $like = $wild . $wpdb->esc_like( $search_term ) . $wild;
+      $sql  = $wpdb->prepare( "SELECT * from {$this->get_db_name()} WHERE name LIKE %s OR transaction_id LIKE %s", array( $like, $like ) );
+      $payment_results = $wpdb->get_results( $sql );
     } else {
-      if ($status == "completed") {
-        $payment_results = $wpdb->get_results(
-          "SELECT * from {$this->get_db_name()} WHERE status= '{$status}'"
-        );
-      } elseif ($status == "pending"){
-        $payment_results = $wpdb->get_results(
-          "SELECT * from {$this->get_db_name()} WHERE status= '{$status}'"
-        );
+      if (! empty($status) ) {
+        $sql = $wpdb->prepare( "SELECT * from {$this->get_db_name()} WHERE status= %s ORDER BY created_at DESC", array( $status ) );
+        $payment_results = $wpdb->get_results( $sql );
       } else {
         $payment_results = $wpdb->get_results(
           "SELECT * from {$this->get_db_name()} ORDER BY created_at DESC"
@@ -93,8 +89,8 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     $primary  = 'id';
     $this->_column_headers = array( $columns, $hidden, $sortable, $primary );
 
-    $status = isset($_GET['status']) ? trim($_GET['status']) : "";
-    $search_term = isset($_POST['s']) ? trim($_POST['s']) : "";
+    $status = isset($_GET['status']) ? sanitize_text_field(trim($_GET['status'])) : "";
+    $search_term = isset($_POST['s']) ? sanitize_text_field(trim($_POST['s'])) : "";
     $this->table_data = $this->get_table_data( $search_term, $status );
 
     
@@ -148,19 +144,21 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     $action = $this->current_action();
 
     if ("delete" === $action) {
-      $list_ids = esc_sql( $_POST['payment_id'] );
+      $list_ids = array_map( 'absint', $_POST['payment_id']);
 
       foreach ($list_ids as $id) {
         global $wpdb;
-        $wpdb->query("DELETE FROM {$this->get_db_name()} WHERE id= {$id} ");
+        $sql = $wpdb->prepare( "DELETE FROM {$this->get_db_name()} WHERE id= %d", array( $id ) );
+        $wpdb->query( $sql );
       }
       $text = (count($list_ids) > 1) ? "payments" : "payment";
+
       add_action( 'admin_notices', $this->bulk_action_notice( count($list_ids), $text, "deleted" ) );
       $this->table_data;
     }
 
     if ("mark_as_completed" === $action) {
-      $list_ids = esc_sql( $_POST['payment_id'] );
+      $list_ids = array_map( 'absint', $_POST['payment_id']);
 
       foreach ($list_ids as $id) {
         global $wpdb;
@@ -197,14 +195,9 @@ class Billplz_CF7_Payment_List extends WP_List_Table
   {
     global $wpdb;
 
-    if ("completed" === $status) {
-      $query = $wpdb->get_results(
-        "SELECT * from {$this->get_db_name()} WHERE status= '{$status}' "
-      );
-    } else {
-      $query = $wpdb->get_results(
-        "SELECT * from {$this->get_db_name()} WHERE status= '{$status}' "
-      );
+    if ( ! empty($status) ) {
+      $sql = $wpdb->prepare( "SELECT * from {$this->get_db_name()} WHERE status= %s", array( $status ) );
+      $query = $wpdb->get_results( $sql );
     }
     return count($query);
   }
