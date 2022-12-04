@@ -12,10 +12,11 @@ class Billplz_CF7_Init
     {
         require_once BCF7_PLUGIN_PATH . "includes/admin/class-admin-menu.php";
         require_once BCF7_PLUGIN_PATH . "includes/payments/class-form-process.php";
-        require_once BCF7_PLUGIN_PATH . "includes/payments/class-shortcodes.php";
+        require_once BCF7_PLUGIN_PATH . "includes/helpers/class-shortcodes.php";
         require_once BCF7_PLUGIN_PATH . "includes/settings/class-api-settings.php";
         require_once BCF7_PLUGIN_PATH . "includes/settings/class-general-settings.php";
         require_once BCF7_PLUGIN_PATH . "includes/helpers/billplz-cf7-helper.php";
+        require_once BCF7_PLUGIN_PATH . "includes/payments/class-payment-callback.php";
     }
 
     public function init()
@@ -26,6 +27,7 @@ class Billplz_CF7_Init
             $bcf7_shortcodes       = Billplz_CF7_Shortcodes::init(),
             $bcf7_api_settings     = new Billplz_CF7_API_Settings(),
             $bcf7_general_settings = new Billplz_CF7_General_Settings(),
+            $bcf7_payment_callback = Billplz_CF7_Callback::init()
         );
     }
 }
