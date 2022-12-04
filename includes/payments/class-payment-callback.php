@@ -1,23 +1,31 @@
 <?php
 
-class Billplz_CF7_Shortcodes
+class Billplz_CF7_Callback
 {
   public static function init()
   {
     $self = new self();
-    add_shortcode("bcf7_payment_confirmation", array($self, "payment_confirmation"));
+    add_action( "init", array( $self, "get" ) );
+    add_action( "init", array( $self, "post" ) );
   }
 
-  public function payment_confirmation()
+  public static function get()
   {
-    if (empty($_GET) or (isset($_GET['post']) && isset($_GET['action']))) return;
+    if (empty($_GET) or (isset($_GET['post']) and isset($_GET['action']))) return;
         
     $x_signature = bcf7_get_xsignature();
     $url         = htmlentities($_SERVER['QUERY_STRING']);
     
     parse_str(html_entity_decode($url), $query);
 
-    if (empty($query['payment-id']) && empty($query['billplz']['x_signature']) && empty($query['billplz']['id']) && empty($query['billplz']['paid']) && empty($query['billplz']['paid_at']) && empty($query['billplz']['id'])) return;
+    if ( ! isset($query['bcf7-listener']) and
+      empty($query['payment-id']) and 
+      empty($query['billplz']['x_signature']) and 
+      empty($query['billplz']['id']) and 
+      empty($query['billplz']['paid']) and 
+      empty($query['billplz']['paid_at']) and 
+      empty($query['billplz']['id'])
+    ) return;
 
     ksort($query);
 
@@ -29,6 +37,7 @@ class Billplz_CF7_Shortcodes
 
     unset($query['billplz']['x_signature']);
     unset($query['payment-id']);
+    unset($query['bcf7-listener']);
 
     $a = array();
     foreach ($query as $key => $value) {
@@ -47,19 +56,12 @@ class Billplz_CF7_Shortcodes
     
     $table_name = $wpdb->prefix . "bcf7_payment";
 
-    $info_obj = $wpdb->get_results($wpdb->prepare("SELECT name, email FROM {$table_name} WHERE id= %d", array($payment_id)));
+    $status_query = $wpdb->get_results($wpdb->prepare("SELECT status FROM {$table_name} WHERE id= %d", array($payment_id)));
+    $status = get_object_vars($status_query[0])['status'];
 
-    $info_array = get_object_vars($info_obj[0]);
+    if ("completed" == $status) return;
 
     if (isset($payment_id) and ($hash == $x_sign) and ('true' == $query['billplz']['paid'])) {
-      ?>
-          <h2>Thank you for your payment!</h2>
-          <p>Payment ID: <?php echo esc_html($payment_id); ?></p>
-          <p>Name: <?php echo esc_html($info_array['name']); ?></p>
-          <p>Email: <?php echo esc_html($info_array['email']); ?></p>
-          <p>Payment Status: Completed</p>
-          <p>Bill ID: <a href="<?php echo esc_url(bcf7_get_url().'/bills/'.$transaction_id); ?>" target="_blank"><?php echo esc_html($transaction_id); ?></a></p>
-      <?php
       
       $wpdb->update( $table_name, array( 
           'status' => 'completed', 
@@ -71,19 +73,19 @@ class Billplz_CF7_Shortcodes
       );
 
     } else {
-      ?>
-          <h2>Sorry, your payment was unsuccessful</h2>
-          <p>Payment Status: Failed</p>
-          <p>Please repay the bill <a href="<?php echo esc_url(bcf7_get_url().'/bills/'.$transaction_id); ?>" target="_blank">here</a></p>
-      <?php
-
+      
       $wpdb->update( $table_name, array( 
           'transaction_id' => $transaction_id, 
           'paid_at' => '0000-00-00 00:00:00',
           'bill_url' => $bill_url
           ), 
-          array( 'ID' => $payment_id ) 
+          array( 'ID' => $payment_id )
       );
     }
+  }
+
+  public static function post()
+  {
+    // TODO: Finish this method!
   }
 }

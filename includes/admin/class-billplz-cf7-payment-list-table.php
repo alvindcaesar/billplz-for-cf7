@@ -2,7 +2,7 @@
 
 require_once BCF7_PLUGIN_PATH . "includes/lib/class-wp-list-table.php";
 
-class Billplz_CF7_Payment_List extends WP_List_Table
+class Billplz_CF7_Payment_List_Table extends WP_List_Table
 {
   // Define $table_data property
   private $table_data;
@@ -202,3 +202,14 @@ class Billplz_CF7_Payment_List extends WP_List_Table
     return count($query);
   }
 }
+
+$bcf7_table = new Billplz_CF7_Payment_List_Table();
+?>
+  <br>
+  <?php $bcf7_table->views(); ?>
+  <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'].'?page=billplz-cf7&tab=payments'); ?>" method="post">
+    <?php $bcf7_table->prepare_items(); ?>
+    <?php $bcf7_table->search_box( "Search Customer or Bill ID", "payment-search-id"); ?>
+    <?php $bcf7_table->display(); ?>
+  </form>
+<?php

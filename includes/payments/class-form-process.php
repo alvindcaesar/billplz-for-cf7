@@ -30,7 +30,7 @@ class Billplz_CF7_Form_Process
                 $payment_id = $this->record_data($form_id, $form_title, $name, $phone, $email, $amount, $transaction_id, $mode, $status);
 
                 $description = "Payment for $form_title";
-                $this->process_payment($name, $email, $amount, $description, $payment_id);
+                $this->process_payment($name, $email, $phone, $amount, $description, $payment_id);
             }
 
         }
@@ -59,7 +59,7 @@ class Billplz_CF7_Form_Process
         return $wpdb->insert_id;
     }
 
-    public function process_payment($name, $email, $amount, $description, $payment_id)
+    public function process_payment($name, $email, $phone, $amount, $description, $payment_id)
     {
         $args = array(
           'headers' => array(
@@ -70,8 +70,9 @@ class Billplz_CF7_Form_Process
               'email' => $email,
               'name' => $name,
               'amount' => $amount * 100,
-              'redirect_url' => add_query_arg(array('payment-id' => $payment_id), site_url("?page_id=".bcf7_general_option('bcf7_redirect_page')."") ),
-              'callback_url' => 'https://webhook.site/778c289e-0247-4c98-865f-5dc0a922f1e9',
+              'mobile' => (isset($phone) ? $phone : ""),
+              'redirect_url' => add_query_arg(array('bcf7-listener' => 'billplz', 'payment-id' => $payment_id), site_url("?page_id=".bcf7_general_option('bcf7_redirect_page')."") ),
+              'callback_url' => add_query_arg(array('bcf7-listener' => 'billplz', 'payment-id' => $payment_id), 'https://webhook.site/1a7bc4cd-01b8-4027-a9c5-34ad74e89fcc'),
               'description' => $description
             )
          );
