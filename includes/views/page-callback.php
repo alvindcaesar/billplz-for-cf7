@@ -20,18 +20,7 @@
 
   <?php if ($active_tab == "payments") {
     require_once BCF7_PLUGIN_PATH .
-    "includes/admin/class-billplz-cf7-payment-list.php";
-
-    $bcf7_table = new Billplz_CF7_Payment_List();
-    echo "<br>";
-    $bcf7_table->views();
-    // Search function
-    echo "<form method='post' name='billplz_search_payment' action='".$_SERVER['PHP_SELF']. "?page=billplz-cf7&tab=payments'>";
-    $bcf7_table->prepare_items();
-    $bcf7_table->search_box( "Search Customer or Bill ID", "payment-search-id");
-    $bcf7_table->display();
-    echo "</form>";
-  
+    "includes/admin/class-billplz-cf7-payment-list-table.php";
   } elseif ($active_tab == "general-settings") {
       require_once BCF7_PLUGIN_PATH . "includes/views/general-settings-page.php";
   } else {
