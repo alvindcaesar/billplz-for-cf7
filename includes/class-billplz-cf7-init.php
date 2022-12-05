@@ -16,7 +16,7 @@ class Billplz_CF7_Init
         require_once BCF7_PLUGIN_PATH . "includes/settings/class-api-settings.php";
         require_once BCF7_PLUGIN_PATH . "includes/settings/class-general-settings.php";
         require_once BCF7_PLUGIN_PATH . "includes/helpers/billplz-cf7-helper.php";
-        require_once BCF7_PLUGIN_PATH . "includes/payments/class-payment-callback.php";
+        require_once BCF7_PLUGIN_PATH . "includes/payments/class-payment-callback-handler.php";
     }
 
     public function init()
