@@ -10,7 +10,7 @@ class Billplz_CF7_Shortcodes
 
   public function payment_confirmation()
   {
-    if ( (empty($_GET) and ("billplz" != $_GET['bcf7-listener'])) or (isset($_GET['post']) and isset($_GET['action']))) return;
+    if ( (empty($_GET) and (isset($_GET['bcf7-listener']) and "billplz" != $_GET['bcf7-listener'])) or (isset($_GET['post']) and isset($_GET['action']))) return;
 
     if (isset($_GET['payment-id']) and "billplz" == $_GET['bcf7-listener']) {
       $payment_id = $_GET['payment-id'];
@@ -29,8 +29,9 @@ class Billplz_CF7_Shortcodes
       $bill   = $data_array['bill_url'];
       $status = $data_array['status'];
 
+      sleep(3); // Give it a few seconds and wait for the payment to be updated in the background.
+
       if ("completed" == $status) {
-        sleep(3);
         ?>
           <h2>Thank you for your payment!</h2>
           <p>Payment ID: <?php echo esc_html($payment_id); ?></p>
@@ -40,8 +41,15 @@ class Billplz_CF7_Shortcodes
           <p>Bill ID: <a href="<?php echo esc_url($bill); ?>" target="_blank"><?php echo esc_html($trx_id); ?></a></p>
         <?php
 
+      } elseif (("pending" == $status) and ("true" == $_GET['billplz']['paid'])) {
+        $bill_url = bcf7_get_url().'/bills/'.($_GET['billplz']['id']);
+        ?>
+          <h2>Something wrong. please contact site owner.</h2>
+          <p>Payment Status: Unknown</p>
+          <p>Please check your bill <a href="<?php echo esc_url($bill_url); ?>" target="_blank">here</a></p>
+        <?php
+
       } else {
-        sleep(3);
         ?>
           <h2>Sorry, your payment was unsuccessful</h2>
           <p>Payment Status: Failed</p>
