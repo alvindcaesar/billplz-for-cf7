@@ -72,7 +72,7 @@ class Billplz_CF7_Form_Process
               'amount' => $amount * 100,
               'mobile' => (isset($phone) ? $phone : ""),
               'redirect_url' => add_query_arg(array('bcf7-listener' => 'billplz', 'payment-id' => $payment_id), site_url("?page_id=".bcf7_general_option('bcf7_redirect_page')."") ),
-              'callback_url' => add_query_arg(array('bcf7-listener' => 'billplz', 'payment-id' => $payment_id), 'https://webhook.site/1a7bc4cd-01b8-4027-a9c5-34ad74e89fcc'),
+              'callback_url' => add_query_arg(array('bcf7-listener' => 'billplz', 'payment-id' => $payment_id), site_url('index.php')),
               'description' => $description
             )
          );
