@@ -1,12 +1,35 @@
 <?php
 
+/**
+ * Billplz_CF7_Payment_DB
+ *
+ * This class contains methods that create the database table for
+ * the payment datas.
+ *
+ * @package Billplz_For_CF7
+ * @since   1.0.0
+ */
 class Billplz_CF7_Payment_DB
 {
+    /**
+     * Run the database creation.
+     *
+     * @since 1.0.0
+     */
     public static function up()
     {
         self::create_db();
     }
 
+    /**
+     * Create the `wp_bcf7_payment` table.
+     *
+     * This method creates the `wp_bcf7_payment` table in the WordPress
+     * database if it does not exist. The table is used to store information
+     * about payments made through the CF7 Billplz plugin.
+     *
+     * @since 1.0.0
+     */
     public static function create_db()
     {
         global $wpdb;

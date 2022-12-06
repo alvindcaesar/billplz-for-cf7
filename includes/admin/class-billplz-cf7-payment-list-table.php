@@ -144,7 +144,7 @@ class Billplz_CF7_Payment_List_Table extends WP_List_Table
     $action = $this->current_action();
 
     if ("delete" === $action) {
-      $list_ids = array_map( 'absint', $_POST['payment_id']);
+      $list_ids = map_deep( $_POST['payment_id'], 'sanitize_text_field');
 
       foreach ($list_ids as $id) {
         global $wpdb;
@@ -158,7 +158,7 @@ class Billplz_CF7_Payment_List_Table extends WP_List_Table
     }
 
     if ("mark_as_completed" === $action) {
-      $list_ids = array_map( 'absint', $_POST['payment_id']);
+      $list_ids = map_deep( $_POST['payment_id'], 'sanitize_text_field');
 
       foreach ($list_ids as $id) {
         global $wpdb;
@@ -204,10 +204,13 @@ class Billplz_CF7_Payment_List_Table extends WP_List_Table
 }
 
 $bcf7_table = new Billplz_CF7_Payment_List_Table();
+
+$php_self = esc_attr( $_SERVER['PHP_SELF'] );
+$page = esc_attr( 'page=billplz-cf7&tab=payments' );
 ?>
   <br>
   <?php $bcf7_table->views(); ?>
-  <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'].'?page=billplz-cf7&tab=payments'); ?>" method="post">
+  <form action="<?php echo $php_self.'?'.$page; ?>" method="post">
     <?php $bcf7_table->prepare_items(); ?>
     <?php $bcf7_table->search_box( "Search Customer or Bill ID", "payment-search-id"); ?>
     <?php $bcf7_table->display(); ?>

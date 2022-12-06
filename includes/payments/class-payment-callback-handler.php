@@ -97,6 +97,8 @@ class Billplz_CF7_Callback
  */
   public static function post()
   {
+    if (! isset($_SERVER['REQUEST_METHOD'])) return;
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       $query_string = file_get_contents('php://input');
