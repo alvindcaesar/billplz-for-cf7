@@ -34,6 +34,7 @@ if (!class_exists("Billplz_CF7")) {
                 self::$instance->define_constants();
                 self::$instance->includes();
                 self::$instance->init = new Billplz_CF7_Init();
+                Billplz_CF7_Admin_Notices::init();
             }
             return self::$instance;
         }
@@ -50,6 +51,7 @@ if (!class_exists("Billplz_CF7")) {
         private function includes()
         {
             require_once BCF7_PLUGIN_PATH . "includes/class-billplz-cf7-init.php";
+            require_once BCF7_PLUGIN_PATH . "includes/admin/class-admin-notices.php";
         }
     }
 }
