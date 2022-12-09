@@ -5,7 +5,7 @@ class Billplz_CF7_Init
     public function __construct()
     {
         if ( ! function_exists( 'wpcf7') ) {
-            add_action( "admin_notices", array( $this, "notice" ) );
+            return;
         } else {
             $this->include_classes();
             $this->init();
@@ -35,15 +35,6 @@ class Billplz_CF7_Init
             $bcf7_general_settings = new Billplz_CF7_General_Settings(),
             $bcf7_payment_callback = Billplz_CF7_Callback::init()
         );
-    }
-
-    public function notice()
-    {
-    ?>
-        <div class="notice notice-error">
-            <p><?php _e( '<strong>Billplz for Contact Form 7 -</strong> Contact Form 7 is not installed and activated. Please install and activate the plugin.', BCF7_TEXT_DOMAIN ); ?></p>
-        </div>
-    <?php
     }
 
     public function add_settings_link ( $links, $file )
