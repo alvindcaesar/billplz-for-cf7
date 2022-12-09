@@ -58,5 +58,5 @@ if (!class_exists("Billplz_CF7")) {
 
 add_action("plugins_loaded", array("Billplz_CF7", "instance"));
 
-require_once plugin_dir_path(__FILE__) . "includes/database/class-payment-database.php";
-register_activation_hook(__FILE__, array("Billplz_CF7_Payment_DB", "up"));
+require_once plugin_dir_path(__FILE__) . "includes/class-billplz-cf7-activator.php";
+register_activation_hook(__FILE__, array("Billplz_CF7_Activator", "activate"));
