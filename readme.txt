@@ -1,12 +1,12 @@
 === Billplz Addon for Contact Form 7 ===
 Contributors: alvindcaesar
 Author URI: https://alvindcaesar.com
-Plugin URI: https://github.com/alvindcaesar/billplz-for-cf7
+Plugin URI: https://github.com/alvindcaesar/billplz-for-contact-form-7
 Tags: e-commerce, payment-gateway, product, subscription, payment-forms
 Requires at least: 5.5
 Tested up to: 6.1.1
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 1.0.0
 License: GNU Version 2 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,9 @@ Payments are processed offsite at [Billplz](https://billplz.com) and the custome
 > 4. That's it. You are now ready to start accepting Billplz payment on your website through your contact form.
 
 == Changelog ==
+
+= 1.0.0, December 14, 2022 =
+* Stable release
 
 = 0.1.0, November 29, 2022 =
 * Release Candidate-1
