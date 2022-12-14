@@ -8,7 +8,7 @@
  * Author URI:      https://alvindcaesar.com
  * Text Domain:     billplz-for-cf7
  * Domain Path:     /languages
- * Version:         0.1.0
+ * Version:         1.0.0
  *
  * @package         Billplz_For_CF7
  */
@@ -45,7 +45,7 @@ if (!class_exists("Billplz_CF7")) {
             define("BCF7_PLUGIN_URL", plugin_dir_url(__FILE__));
             define("BCF7_PLUGIN_FILE", plugin_basename(__FILE__));
             define("BCF7_TEXT_DOMAIN", "billplz-for-cf7");
-            define("BCF7_PLUGIN_VERSION", "0.1.0");
+            define("BCF7_PLUGIN_VERSION", "1.0.0");
         }
 
         private function includes()
