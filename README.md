@@ -13,6 +13,9 @@ Payments are processed offsite at [Billplz](https://billplz.com) and the custome
 
 ### Changelog
 
+#### 1.0.1, December 16, 2022
+* Fix: Fatal error upon activation when Contact Form 7 is not active.
+
 #### 1.0.0, December 14, 2022
 * Stable release
 
