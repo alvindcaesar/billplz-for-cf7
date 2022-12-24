@@ -90,19 +90,21 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
     public function bcf7_redirect_page_callback()
     {
       $args        = array('post_type' => 'page', 'posts_per_page' => -1);
-	    $cf7_forms   = get_posts( $args );
-      $form_ids    = wp_list_pluck( $cf7_forms , 'ID' );
-	    $form_titles = wp_list_pluck( $cf7_forms , 'post_title' );
-	    $ids_titles  = array_combine($form_ids, $form_titles);
+	    $pages       = get_posts( $args );
+      $page_ids    = wp_list_pluck( $pages , 'ID' );
+	    $page_titles = wp_list_pluck( $pages , 'post_title' );
+	    $ids_titles  = array_combine($page_ids, $page_titles);
       
       ?>
       
       <select name='bcf7_general_settings[bcf7_redirect_page]' id='bcf7_redirect_page'>
         <option value="">--Select a redirect page--</option>
-        <?php foreach ($ids_titles as $id => $title) {?>
+        <?php foreach ($ids_titles as $id => $title) {
+          ?>
           <option value=<?php echo esc_attr($id) ?><?php isset(self::$options['bcf7_redirect_page']) ? selected( $id, self::$options['bcf7_redirect_page'], true ) : "";?>>
             <?php echo esc_html($title); ?>
-          </option><?php } ?>
+          </option>
+          <?php } ?>
       </select> 
 
       <?php
