@@ -6,6 +6,11 @@ class Billplz_CF7_Admin_Notices
 	{
 		add_action( "admin_notices", array( __CLASS__, "cf7_inactive") );
 		add_action( "admin_notices", array( __CLASS__, "keys_check") );
+
+		if ( "1" == bcf7_general_option("bcf7_mode") ) {
+			add_action( "admin_bar_menu", array( __CLASS__, "sandbox_active"), 999 );
+			add_action( "admin_head", array( __CLASS__, "sandbox_active_style") );
+		}
 	}
 
 	public static function cf7_inactive()
@@ -36,5 +41,27 @@ class Billplz_CF7_Admin_Notices
 				), BCF7_TEXT_DOMAIN);
 			}
 		}
+	}
+
+	public static function sandbox_active( $admin_bar )
+	{
+		$args = array(
+				'id' => 'bcf7-test-mode-notice',
+				'title' => 'BCF7 Sandbox Mode Active', 
+				'href' => admin_url("admin.php?page=billplz-cf7&tab=general-settings")
+			);
+			
+		$admin_bar->add_node($args);
+	}
+
+	public static function sandbox_active_style()
+	{
+	?>
+		<style>
+			#wpadminbar ul li#wp-admin-bar-bcf7-test-mode-notice > a {
+				color: #f3bb1b;
+			}
+		</style>';
+	<?php
 	}
 }
