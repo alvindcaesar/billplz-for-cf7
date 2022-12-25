@@ -6,7 +6,7 @@ Tags: e-commerce, payment-gateway, product, subscription, payment-forms
 Requires at least: 5.5
 Tested up to: 6.1.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GNU Version 2 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,11 @@ Payments are processed offsite at [Billplz](https://billplz.com) and the custome
 > 4. That's it. You are now ready to start accepting Billplz payment on your website through your contact form.
 
 == Changelog ==
+
+= 1.0.2, December 24, 2022 =
+* New: Display current mode status (Live / Test) on the dashboard's admin bar.
+* New: A payment redirect page will be automatically created and selected by default upon plugin activation.
+* Improvement on settings page UI
 
 = 1.0.1, December 16, 2022 =
 * Fix: Fatal error upon activation when Contact Form 7 is not active.
