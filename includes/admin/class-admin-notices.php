@@ -6,6 +6,7 @@ class Billplz_CF7_Admin_Notices
 	{
 		add_action( "admin_notices", array( __CLASS__, "cf7_inactive") );
 		add_action( "admin_notices", array( __CLASS__, "keys_check") );
+		add_action( "admin_bar_menu", array( __CLASS__, "status_notice"), 999 );
 	}
 
 	public static function cf7_inactive()
@@ -36,5 +37,21 @@ class Billplz_CF7_Admin_Notices
 				), BCF7_TEXT_DOMAIN);
 			}
 		}
+	}
+
+	public static function status_notice( $admin_bar )
+	{
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$color = ( "1" == bcf7_general_option("bcf7_mode") ) ? "#F3BB1B" : "#90EE90";
+		$args = array(
+				'id' => 'bcf7-mode-status',
+				'title' => "BCF7 Mode Status: <span style='color:{$color};'>".strtoupper(bcf7_get_mode())."</span>",
+				'href' => admin_url("admin.php?page=billplz-cf7&tab=general-settings")
+			);
+			
+		$admin_bar->add_menu($args);
 	}
 }

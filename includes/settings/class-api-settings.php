@@ -18,7 +18,8 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
 
             add_settings_section(
                 "bcf7_live_section",
-                "Live Credentials",
+                "<h3>Live Credentials</h3>
+                <p class='description'>Go to <a href='https://dashboard.billplz.com/' target='_blank'><code>https://dashboard.billplz.com/</code></a> to get your live credentials.</p>",
                 null,
                 "bcf7_live_settings"
             );
@@ -49,14 +50,15 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
 
             add_settings_section(
                 "bcf7_sandbox_section",
-                "Sandbox Credentials",
+                "<h3>Test Credentials</h3>
+                <p class='description'>Go to <a href='https://dashboard.billplz-sandbox.com/' target='_blank'><code>https://dashboard.billplz-sandbox.com/</code></a> to get your test credentials.</p>",
                 null,
                 "bcf7_sandbox_settings"
             );
 
             add_settings_field(
                 "bcf7_sandbox_secret_key",
-                "Secret Key",
+                "Test Secret Key",
                 array($this, 'bcf7_sandbox_key_callback'),
                 "bcf7_sandbox_settings",
                 "bcf7_sandbox_section",
@@ -64,7 +66,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
 
             add_settings_field(
                 "bcf7_sandbox_collection_id",
-                "Collection ID",
+                "Test Collection ID",
                 array($this, 'bcf7_sandbox_collection_id_callback'),
                 "bcf7_sandbox_settings",
                 "bcf7_sandbox_section",
@@ -72,7 +74,7 @@ if (!class_exists("Billplz_CF7_API_Settings")) {
 
             add_settings_field(
                 "bcf7_sandbox_xsignature_key",
-                "X-Signature Key",
+                "Test X-Signature Key",
                 array($this, 'bcf7_sandbox_xsignature_key_callback'),
                 "bcf7_sandbox_settings",
                 "bcf7_sandbox_section",

@@ -37,7 +37,7 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
 
       add_settings_field(
         "bcf7_form_select",
-        "Choose a payment form to use",
+        "Payment Form",
         array( $this, 'bcf7_form_select_callback' ),
         "bcf7_general_settings",
         "bcf7_general_section",
@@ -48,7 +48,7 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
 
       add_settings_field(
         "bcf7_redirect_page",
-        "Payment Confirmation Page",
+        "Payment Confirmation / Redirect Page",
         array( $this, 'bcf7_redirect_page_callback' ),
         "bcf7_general_settings",
         "bcf7_general_section",
@@ -83,28 +83,31 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
             <?php echo esc_html($title) ." (ID: ". esc_html($id) .")"; ?>
           </option><?php } ?>
       </select> 
-
+      <p class="description">Choose a Contact Form 7 form to use. <a href="<?php echo esc_url(admin_url("admin.php?page=wpcf7-new")); ?>">Click here</a> to create a new form.</p>
       <?php
     }
 
     public function bcf7_redirect_page_callback()
     {
       $args        = array('post_type' => 'page', 'posts_per_page' => -1);
-	    $cf7_forms   = get_posts( $args );
-      $form_ids    = wp_list_pluck( $cf7_forms , 'ID' );
-	    $form_titles = wp_list_pluck( $cf7_forms , 'post_title' );
-	    $ids_titles  = array_combine($form_ids, $form_titles);
+	    $pages       = get_posts( $args );
+      $page_ids    = wp_list_pluck( $pages , 'ID' );
+	    $page_titles = wp_list_pluck( $pages , 'post_title' );
+	    $ids_titles  = array_combine($page_ids, $page_titles);
       
       ?>
       
       <select name='bcf7_general_settings[bcf7_redirect_page]' id='bcf7_redirect_page'>
         <option value="">--Select a redirect page--</option>
-        <?php foreach ($ids_titles as $id => $title) {?>
+        <?php foreach ($ids_titles as $id => $title) {
+          ?>
           <option value=<?php echo esc_attr($id) ?><?php isset(self::$options['bcf7_redirect_page']) ? selected( $id, self::$options['bcf7_redirect_page'], true ) : "";?>>
             <?php echo esc_html($title); ?>
-          </option><?php } ?>
+          </option>
+          <?php } ?>
       </select> 
-
+      <p class="description">Choose a page to redirect after payment completed. Default page: <strong>BCF7 Payment Confirmation</strong></p>
+      <p class="description">If you want to use a custom redirect page, make sure to add the <code>[bcf7_payment_confirmation]</code> shortcode inside the custom page's content.</p>
       <?php
     }
   }
