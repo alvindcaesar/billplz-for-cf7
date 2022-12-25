@@ -8,7 +8,7 @@
  * Author URI:      https://alvindcaesar.com
  * Text Domain:     billplz-for-cf7
  * Domain Path:     /languages
- * Version:         1.0.1
+ * Version:         1.0.2
  *
  * @package         Billplz_For_CF7
  */
