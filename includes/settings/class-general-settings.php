@@ -37,7 +37,7 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
 
       add_settings_field(
         "bcf7_form_select",
-        "Choose a payment form to use",
+        "Payment Form",
         array( $this, 'bcf7_form_select_callback' ),
         "bcf7_general_settings",
         "bcf7_general_section",
@@ -48,7 +48,7 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
 
       add_settings_field(
         "bcf7_redirect_page",
-        "Payment Confirmation Page",
+        "Payment Confirmation / Redirect Page",
         array( $this, 'bcf7_redirect_page_callback' ),
         "bcf7_general_settings",
         "bcf7_general_section",
@@ -83,7 +83,7 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
             <?php echo esc_html($title) ." (ID: ". esc_html($id) .")"; ?>
           </option><?php } ?>
       </select> 
-
+      <p class="description">Choose a Contact Form 7 form to use. <a href="<?php echo esc_url(admin_url("admin.php?page=wpcf7-new")); ?>">Click here</a> to create a new form.</p>
       <?php
     }
 
@@ -106,7 +106,8 @@ if ( ! class_exists("Billplz_CF7_General_Settings") ) {
           </option>
           <?php } ?>
       </select> 
-
+      <p class="description">Choose a page to redirect after payment completed. Default page: <strong>BCF7 Payment Confirmation</strong></p>
+      <p class="description">If you want to use a custom redirect page, make sure to add the <code>[bcf7_payment_confirmation]</code> shortcode inside the custom page's content.</p>
       <?php
     }
   }
