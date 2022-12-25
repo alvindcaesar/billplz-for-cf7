@@ -13,6 +13,11 @@ Payments are processed offsite at [Billplz](https://billplz.com) and the custome
 
 ### Changelog
 
+#### 1.0.2, December 24, 2022
+* New: Display current mode status (Live / Test) on the dashboard's admin bar.
+* New: A payment redirect page will be automatically created and selected by default upon plugin activation.
+* Improvement on settings page UI
+
 #### 1.0.1, December 16, 2022
 * Fix: Fatal error upon activation when Contact Form 7 is not active.
 
