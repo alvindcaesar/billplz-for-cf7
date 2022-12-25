@@ -41,7 +41,11 @@ class Billplz_CF7_Admin_Notices
 
 	public static function status_notice( $admin_bar )
 	{
-		$color = ( "1" == bcf7_general_option("bcf7_mode") ) ? "#f3bb1b" : "#90EE90";
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$color = ( "1" == bcf7_general_option("bcf7_mode") ) ? "#F3BB1B" : "#90EE90";
 		$args = array(
 				'id' => 'bcf7-mode-status',
 				'title' => "BCF7 Mode Status: <span style='color:{$color};'>".strtoupper(bcf7_get_mode())."</span>",
