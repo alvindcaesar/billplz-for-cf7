@@ -47,7 +47,7 @@ class Activate
     $options = get_option("bcf7_general_settings");
 
     if ( $options ) {
-      if ( ! empty( $options["bcf7_redirect_page"] )) {
+      if ( ! empty( $options["bcf7_redirect_page"] ) and $options["bcf7_redirect_page"] == $id) {
         return;
       } else {
         $options["bcf7_redirect_page"] = $id;
