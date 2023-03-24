@@ -24,6 +24,6 @@ class Menu
   public function callback()
   {
     require_once BCF7_PLUGIN_PATH .
-    "app/views/page-callback.php";
+      "app/views/page-callback.php";
   }
 }

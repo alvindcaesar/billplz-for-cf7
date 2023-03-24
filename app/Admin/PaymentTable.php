@@ -18,19 +18,19 @@ class PaymentTable extends WP_List_Table
   }
 
   // Get table data
-  private function get_table_data( $search_term = "", $status = "" )
+  private function get_table_data($search_term = "", $status = "")
   {
     global $wpdb;
 
-    if (! empty($search_term) ) {
+    if (!empty($search_term)) {
       $wild = "%";
-      $like = $wild . $wpdb->esc_like( $search_term ) . $wild;
-      $sql  = $wpdb->prepare( "SELECT * from {$this->get_db_name()} WHERE name LIKE %s OR transaction_id LIKE %s", array( $like, $like ) );
-      $payment_results = $wpdb->get_results( $sql );
+      $like = $wild . $wpdb->esc_like($search_term) . $wild;
+      $sql  = $wpdb->prepare("SELECT * from {$this->get_db_name()} WHERE name LIKE %s OR transaction_id LIKE %s", array($like, $like));
+      $payment_results = $wpdb->get_results($sql);
     } else {
-      if (! empty($status) ) {
-        $sql = $wpdb->prepare( "SELECT * from {$this->get_db_name()} WHERE status= %s ORDER BY created_at DESC", array( $status ) );
-        $payment_results = $wpdb->get_results( $sql );
+      if (!empty($status)) {
+        $sql = $wpdb->prepare("SELECT * from {$this->get_db_name()} WHERE status= %s ORDER BY created_at DESC", array($status));
+        $payment_results = $wpdb->get_results($sql);
       } else {
         $payment_results = $wpdb->get_results(
           "SELECT * from {$this->get_db_name()} ORDER BY created_at DESC"
@@ -44,11 +44,11 @@ class PaymentTable extends WP_List_Table
         $payment_array[] = array(
           "id"             => $payment_data->id,
           "customer"       => $payment_data->name,
-          "form"           => $payment_data->form_title . " (ID: ".$payment_data->form_id.")",
+          "form"           => $payment_data->form_title . " (ID: " . $payment_data->form_id . ")",
           "amount"         => $payment_data->amount,
-          "transaction_id" => "<a href=".$payment_data->bill_url." target='_blank'>$payment_data->transaction_id</a>",
-          "created_at"     => nl2br("Submitted on \n ".date('F j, Y \a\t\ g:i a', strtotime($payment_data->created_at))." "),
-          "paid_at"        => ("0000-00-00 00:00:00" != $payment_data->paid_at) ? (nl2br("Paid on \n ".date('F j, Y \a\t\ g:i a', strtotime($payment_data->paid_at))." ")) : "-",
+          "transaction_id" => "<a href=" . $payment_data->bill_url . " target='_blank'>$payment_data->transaction_id</a>",
+          "created_at"     => nl2br("Submitted on \n " . date('F j, Y \a\t\ g:i a', strtotime($payment_data->created_at)) . " "),
+          "paid_at"        => ("0000-00-00 00:00:00" != $payment_data->paid_at) ? (nl2br("Paid on \n " . date('F j, Y \a\t\ g:i a', strtotime($payment_data->paid_at)) . " ")) : "-",
           "status"         => ucfirst($payment_data->status),
         );
       }
@@ -59,25 +59,25 @@ class PaymentTable extends WP_List_Table
   // Define table columns
   public function get_columns()
   {
-      $columns = array(
-          "cb"             => "<input type='checkbox' />",
-          "id"             => "Payment ID",
-          "customer"       => "Customer",
-          "form"           => "Form Name",
-          "amount"         => "Amount (RM)",
-          "transaction_id" => "Bill ID",
-          "created_at"     => "Submitted",
-          "paid_at"        => "Paid",
-          "status"         => "Payment Status",
-      );
+    $columns = array(
+      "cb"             => "<input type='checkbox' />",
+      "id"             => "Payment ID",
+      "customer"       => "Customer",
+      "form"           => "Form Name",
+      "amount"         => "Amount (RM)",
+      "transaction_id" => "Bill ID",
+      "created_at"     => "Submitted",
+      "paid_at"        => "Paid",
+      "status"         => "Payment Status",
+    );
 
-      return $columns;
+    return $columns;
   }
 
   // Display message when there are no records.
   public function no_items()
   {
-    _e( 'No payment records.', BCF7_TEXT_DOMAIN );
+    _e('No payment records.', BCF7_TEXT_DOMAIN);
   }
 
   // Bind table with columns, data and etc
@@ -89,17 +89,17 @@ class PaymentTable extends WP_List_Table
     $hidden   = array();
     $sortable = array();
     $primary  = 'id';
-    $this->_column_headers = array( $columns, $hidden, $sortable, $primary );
+    $this->_column_headers = array($columns, $hidden, $sortable, $primary);
 
     $status = isset($_GET['status']) ? sanitize_text_field(trim($_GET['status'])) : "";
     $search_term = isset($_POST['s']) ? sanitize_text_field(trim($_POST['s'])) : "";
-    $this->table_data = $this->get_table_data( $search_term, $status );
+    $this->table_data = $this->get_table_data($search_term, $status);
 
-    
+
     $per_page = 50;
     $current_page = $this->get_pagenum();
     $total_items = count($this->table_data);
-    $this->set_pagination_args( array(
+    $this->set_pagination_args(array(
       "total_items" => $total_items,
       "per_page"    => $per_page
     ));
@@ -146,29 +146,29 @@ class PaymentTable extends WP_List_Table
     $action = $this->current_action();
 
     if ("delete" === $action) {
-      $list_ids = map_deep( $_POST['payment_id'], 'sanitize_text_field');
+      $list_ids = map_deep($_POST['payment_id'], 'sanitize_text_field');
 
       foreach ($list_ids as $id) {
         global $wpdb;
-        $sql = $wpdb->prepare( "DELETE FROM {$this->get_db_name()} WHERE id= %d", array( $id ) );
-        $wpdb->query( $sql );
+        $sql = $wpdb->prepare("DELETE FROM {$this->get_db_name()} WHERE id= %d", array($id));
+        $wpdb->query($sql);
       }
       $text = (count($list_ids) > 1) ? "payments" : "payment";
 
-      add_action( 'admin_notices', $this->bulk_action_notice( count($list_ids), $text, "deleted" ) );
+      add_action('admin_notices', $this->bulk_action_notice(count($list_ids), $text, "deleted"));
       $this->table_data;
     }
 
     if ("mark_as_completed" === $action) {
-      $list_ids = map_deep( $_POST['payment_id'], 'sanitize_text_field');
+      $list_ids = map_deep($_POST['payment_id'], 'sanitize_text_field');
 
       foreach ($list_ids as $id) {
         global $wpdb;
-        $wpdb->update( $this->get_db_name(), array( 'status' => 'completed'), array( 'ID' => $id ) );
+        $wpdb->update($this->get_db_name(), array('status' => 'completed'), array('ID' => $id));
       }
 
       $text = (count($list_ids) > 1) ? "payments" : "payment";
-      add_action( 'admin_notices', $this->bulk_action_notice( count($list_ids), $text, "updated" ) );
+      add_action('admin_notices', $this->bulk_action_notice(count($list_ids), $text, "updated"));
       $this->table_data;
     }
   }
@@ -178,17 +178,17 @@ class PaymentTable extends WP_List_Table
     printf('<div id="message" class="updated notice is-dismissable"><p>' . __('%d %s %s.', BCF7_TEXT_DOMAIN) . '</p></div>', $count, $text, $status);
   }
 
-  protected function get_views() 
-  { 
+  protected function get_views()
+  {
     $completed = $this->get_status_count("completed");
     $pending   = $this->get_status_count("pending");
 
     $status_links = array(
-        "all"       => __("<a class='".((! isset($_GET['status'])) ? 'current' : '')."' href='".remove_query_arg("status")."'>All <span class='count'>(".($completed + $pending).")</span></a>", BCF7_TEXT_DOMAIN),
+      "all"       => __("<a class='" . ((!isset($_GET['status'])) ? 'current' : '') . "' href='" . remove_query_arg("status") . "'>All <span class='count'>(" . ($completed + $pending) . ")</span></a>", BCF7_TEXT_DOMAIN),
 
-        "completed" => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'completed')) ? 'current' : '')."' href='".add_query_arg("status", "completed")."'>Completed <span class='count'>(".$completed.")</span></a>", BCF7_TEXT_DOMAIN),
+      "completed" => __("<a class='" . ((isset($_GET['status']) && ($_GET['status'] == 'completed')) ? 'current' : '') . "' href='" . add_query_arg("status", "completed") . "'>Completed <span class='count'>(" . $completed . ")</span></a>", BCF7_TEXT_DOMAIN),
 
-        "pending"   => __("<a class='".((isset($_GET['status']) && ($_GET['status'] == 'pending')) ? 'current' : '')."' href='".add_query_arg("status", "pending")."'>Pending <span class='count'>(".$pending.")</span></a>", BCF7_TEXT_DOMAIN)
+      "pending"   => __("<a class='" . ((isset($_GET['status']) && ($_GET['status'] == 'pending')) ? 'current' : '') . "' href='" . add_query_arg("status", "pending") . "'>Pending <span class='count'>(" . $pending . ")</span></a>", BCF7_TEXT_DOMAIN)
     );
     return $status_links;
   }
@@ -197,12 +197,10 @@ class PaymentTable extends WP_List_Table
   {
     global $wpdb;
 
-    if ( ! empty($status) ) {
-      $sql = $wpdb->prepare( "SELECT * from {$this->get_db_name()} WHERE status= %s", array( $status ) );
-      $query = $wpdb->get_results( $sql );
+    if (!empty($status)) {
+      $sql = $wpdb->prepare("SELECT * from {$this->get_db_name()} WHERE status= %s", array($status));
+      $query = $wpdb->get_results($sql);
     }
     return count($query);
   }
 }
-
-

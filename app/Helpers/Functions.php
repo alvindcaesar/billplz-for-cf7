@@ -2,27 +2,27 @@
 
 namespace BillplzCF7\Helpers;
 
-class Functions 
+class Functions
 {
   private static $instance = null;
 
-  public static function get_instance() 
+  public static function get_instance()
   {
-    if ( self::$instance === null ) {
-        self::$instance = new self();
+    if (self::$instance === null) {
+      self::$instance = new self();
     }
     return self::$instance;
   }
 
   public function general_option($key = '', $default = false)
   {
-    $value = ! empty(get_option('bcf7_general_settings')[$key]) ? get_option('bcf7_general_settings')[$key] : $default;
+    $value = !empty(get_option('bcf7_general_settings')[$key]) ? get_option('bcf7_general_settings')[$key] : $default;
     return $value;
   }
 
   public function api_option($key = '', $default = false)
   {
-    $value = ! empty(get_option('bcf7_api_options')[$key]) ? get_option('bcf7_api_options')[$key] : $default;
+    $value = !empty(get_option('bcf7_api_options')[$key]) ? get_option('bcf7_api_options')[$key] : $default;
     return $value;
   }
 
@@ -36,9 +36,9 @@ class Functions
   {
     $live    = "https://www.billplz.com";
     $sandbox = "https://www.billplz-sandbox.com";
-  
+
     $url = ("Live" == $this->get_mode()) ? $live : $sandbox;
-  
+
     return $url;
   }
 
@@ -46,9 +46,9 @@ class Functions
   {
     $live    = base64_encode($this->api_option("bcf7_live_secret_key"));
     $sandbox = base64_encode($this->api_option("bcf7_sandbox_secret_key"));
-  
+
     $api_key = ("Live" == $this->get_mode()) ? $live : $sandbox;
-  
+
     return $api_key;
   }
 
@@ -56,9 +56,9 @@ class Functions
   {
     $live    = $this->api_option("bcf7_live_collection_id");
     $sandbox = $this->api_option("bcf7_sandbox_collection_id");
-  
+
     $collection_id = ("Live" == $this->get_mode()) ? $live : $sandbox;
-  
+
     return $collection_id;
   }
 
@@ -66,11 +66,9 @@ class Functions
   {
     $live    = $this->api_option("bcf7_live_xsignature_key");
     $sandbox = $this->api_option("bcf7_sandbox_xsignature_key");
-  
+
     $xsignature = ("Live" == $this->get_mode()) ? $live : $sandbox;
-  
+
     return $xsignature;
   }
 }
-
-

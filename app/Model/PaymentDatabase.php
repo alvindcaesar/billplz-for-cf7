@@ -2,9 +2,9 @@
 
 namespace BillplzCF7\Model;
 
-class PaymentDatabase 
+class PaymentDatabase
 {
-/**
+    /**
      * Create the `wp_bcf7_payment` table.
      *
      * This method creates the `wp_bcf7_payment` table in the WordPress
@@ -42,7 +42,6 @@ class PaymentDatabase
 
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($query);
-
         }
     }
 }

@@ -5,9 +5,9 @@ namespace BillplzCF7\Admin;
 use BillplzCF7\Helpers\Functions;
 
 
-class BarMenu 
+class BarMenu
 {
-  public $helpers;
+  private $helpers;
 
   public function __construct()
   {
@@ -16,46 +16,46 @@ class BarMenu
 
   public function register()
   {
-		add_action( "admin_bar_menu", array( $this, "menu"), 999 );
+    add_action("admin_bar_menu", array($this, "menu"), 999);
   }
 
-  public function menu( $admin_bar )
+  public function menu($admin_bar)
   {
-    if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
+    if (!current_user_can('manage_options')) {
+      return;
+    }
 
-		$color = ( "1" == $this->helpers->general_option("bcf7_mode") ) ? "#F3BB1B" : "#90EE90";
+    $color = ("1" == $this->helpers->general_option("bcf7_mode")) ? "#F3BB1B" : "#90EE90";
     $menu_id = "bcf7-ab";
 
-		$args = array(
+    $args = array(
       array(
-				'id'    => $menu_id,
-				'title' => "BCF7 Mode Status: <span style='color:{$color};'>".strtoupper( $this->helpers->get_mode() )."</span>",
-				'href'  => '#'
+        'id'    => $menu_id,
+        'title' => "BCF7 Mode Status: <span style='color:{$color};'>" . strtoupper($this->helpers->get_mode()) . "</span>",
+        'href'  => '#'
       ),
       array(
-				'parent' => $menu_id,
+        'parent' => $menu_id,
         'id'     => 'bcf7-ab-payments',
-				'title'  => "Payments",
-				'href'   => admin_url("admin.php?page=billplz-cf7&tab=payments")
+        'title'  => "Payments",
+        'href'   => admin_url("admin.php?page=billplz-cf7&tab=payments")
       ),
       array(
-				'parent' => $menu_id,
+        'parent' => $menu_id,
         'id'     => 'bcf7-ab-general-settings',
-				'title'  => "General Settings",
-				'href'   => admin_url("admin.php?page=billplz-cf7&tab=general-settings")
+        'title'  => "General Settings",
+        'href'   => admin_url("admin.php?page=billplz-cf7&tab=general-settings")
       ),
       array(
-				'parent' => $menu_id,
+        'parent' => $menu_id,
         'id'     => 'bcf7-ab-api-settings',
-				'title'  => "API Settings",
-				'href'   => admin_url("admin.php?page=billplz-cf7&tab=api-settings")
+        'title'  => "API Settings",
+        'href'   => admin_url("admin.php?page=billplz-cf7&tab=api-settings")
       ),
     );
 
-    foreach ( $args as $arg ) {
-      $admin_bar->add_menu( $arg );
+    foreach ($args as $arg) {
+      $admin_bar->add_menu($arg);
     }
   }
 }
