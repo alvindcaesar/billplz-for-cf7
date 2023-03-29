@@ -16,6 +16,10 @@
     "api-settings"
         ? "nav-tab-active"
         : ""; ?>">API Settings</a>
+    <a href="?page=billplz-cf7&tab=email-settings" class="nav-tab <?php echo $active_tab ==
+    "email-settings"
+        ? "nav-tab-active"
+        : ""; ?>">Email Settings</a>
   </h2>
 
   <?php if ($active_tab == "payments") {
@@ -36,7 +40,11 @@
   } elseif ($active_tab == "general-settings") {
       require_once BCF7_PLUGIN_PATH . "app/views/general-settings-page.php";
 
-  } else {
+  } elseif ($active_tab == "api-settings"){
     require_once BCF7_PLUGIN_PATH . "app/views/api-settings-page.php";
-  } ?>
+
+  } else {
+    require_once BCF7_PLUGIN_PATH . "app/views/email-settings-page.php";
+  }
+  ?>
 </div>
