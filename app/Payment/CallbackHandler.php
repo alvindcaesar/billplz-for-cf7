@@ -2,6 +2,8 @@
 
 namespace BillplzCF7\Payment;
 
+use BillplzCF7\Helpers\EmailConfirmation;
+
 class CallbackHandler
 {
   private $helpers;
@@ -27,9 +29,12 @@ class CallbackHandler
 
       $table_name = $wpdb->prefix . "bcf7_payment";
 
-      $status_query = $wpdb->get_results($wpdb->prepare("SELECT status FROM {$table_name} WHERE id= %d", array($_GET['payment-id'])));
+      $query = $wpdb->get_results($wpdb->prepare("SELECT name, email, amount, status FROM {$table_name} WHERE id= %d", array($_GET['payment-id'])));
 
-      $status = get_object_vars($status_query[0])['status'];
+      $name = get_object_vars($query[0])['name'];
+      $email = get_object_vars($query[0])['email'];
+      $amount = get_object_vars($query[0])['amount'];
+      $status = get_object_vars($query[0])['status'];
 
       if ("completed" == $status) return;
     }
@@ -81,6 +86,17 @@ class CallbackHandler
         ),
         array('ID' => $payment_id)
       );
+
+      $transactions = array(
+        'customer_email' => $email,
+        'customer_name' => $name,
+        'txn_id' => $transaction_id,
+        'txn_date' => $paid_at,
+        'txn_amount' => $amount
+      );
+
+      (new EmailConfirmation())->send( $transactions );
+
     } elseif ((isset($_GET['bcf7-listener'])) and ($hash == $x_sign) and ('false' == $query['billplz']['paid'])) {
 
       $wpdb->update(
