@@ -4,7 +4,7 @@ Author URI: https://alvindcaesar.com
 Plugin URI: https://github.com/alvindcaesar/billplz-for-contact-form-7
 Tags: e-commerce, payment-gateway, product, subscription, payment-forms
 Requires at least: 5.5
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 7.4
 Stable tag: 1.2
 License: GNU Version 2 or Any Later Version
@@ -27,7 +27,8 @@ Payments are processed offsite at [Billplz](https://billplz.com) and the custome
 
 == Changelog ==
 
-= 1.2 - March 23, 2023 =
+= 1.2 - March 30, 2023 =
+* New: Added option to send email confirmation on payment success.
 * New: Added ability to select multiple forms as payment forms.
 * Improvement: Codebase refactoring for better organization.
 

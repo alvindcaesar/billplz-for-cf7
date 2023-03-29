@@ -13,7 +13,8 @@ Payments are processed offsite at [Billplz](https://billplz.com) and the custome
 
 ### Changelog
 
-#### 1.2 - March 23, 2023
+#### 1.2 - March 30, 2023
+* New: Added option to send email confirmation on payment success.
 * New: Added ability to select multiple forms as payment forms.
 * Improvement: Codebase refactoring for better organization.
 
