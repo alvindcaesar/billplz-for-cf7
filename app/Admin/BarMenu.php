@@ -52,6 +52,12 @@ class BarMenu
         'title'  => "API Settings",
         'href'   => admin_url("admin.php?page=billplz-cf7&tab=api-settings")
       ),
+      array(
+        'parent' => $menu_id,
+        'id'     => 'bcf7-ab-email-settings',
+        'title'  => "Email Settings",
+        'href'   => admin_url("admin.php?page=billplz-cf7&tab=email-settings")
+      ),
     );
 
     foreach ($args as $arg) {
