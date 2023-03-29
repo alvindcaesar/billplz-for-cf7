@@ -1,17 +1,15 @@
 <?php
 
-class Billplz_CF7_Activator
+namespace BillplzCF7\Base;
+
+use BillplzCF7\Model\PaymentDatabase;
+
+class Activate
 {
   public static function activate()
   {
-    self::db();
+    PaymentDatabase::create_db();
     self::create_pages();
-  }
-
-  public static function db()
-  {
-    require_once plugin_dir_path(__FILE__) . "database/class-payment-database.php";
-    Billplz_CF7_Payment_DB::up();
   }
 
   private static function create_pages()
@@ -19,26 +17,23 @@ class Billplz_CF7_Activator
     $page_title = "BCF7 Payment Confirmation";
     $page_content = "<!-- wp:shortcode -->[bcf7_payment_confirmation]<!-- /wp:shortcode -->";
 
-    $page = get_page_by_title( $page_title );
+    $page = get_page_by_title($page_title);
 
     $instance = new self();
 
-    if (! empty( $page ) ) {
-      if ( $page->post_content == $page_content ) {
-        return;
-      } else {
-        $instance->save_id($instance->page_id());
-      }
+    if (!empty($page) and ($page->post_content == $page_content)) {
+      return;
     } else {
-      $instance->save_id($instance->page_id());
+      $id = $instance->page_id();
+      $instance->save_id($id);
     }
   }
 
   private function page_id()
   {
-     return wp_insert_post(
+    return wp_insert_post(
       array(
-        'post_title'     => __( 'BCF7 Payment Confirmation', 'billplz-for-cf7' ),
+        'post_title'     => __('BCF7 Payment Confirmation', 'billplz-for-cf7'),
         'post_name'      => 'bcf7-payment-confirmation',
         'post_content'   => "<!-- wp:shortcode -->[bcf7_payment_confirmation]<!-- /wp:shortcode -->",
         'post_status'    => 'publish',
@@ -49,20 +44,24 @@ class Billplz_CF7_Activator
     );
   }
 
-  private function save_id( $id )
+  private function save_id($id)
   {
     $options = get_option("bcf7_general_settings");
 
-    if ( $options ) {
-      $options["bcf7_redirect_page"] = $id;
-      update_option( "bcf7_general_settings", $options );
+    if ($options) {
+      if (!empty($options["bcf7_redirect_page"]) and $options["bcf7_redirect_page"] == $id) {
+        return;
+      } else {
+        $options["bcf7_redirect_page"] = $id;
+        update_option("bcf7_general_settings", $options);
+      }
     } else {
       $options = array(
         "bcf7_mode" => "",
         "bcf7_form_select" => "",
         "bcf7_redirect_page" => $id
       );
-      add_option( "bcf7_general_settings", $options );
+      add_option("bcf7_general_settings", $options);
     }
   }
 }

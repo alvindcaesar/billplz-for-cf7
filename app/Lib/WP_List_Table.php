@@ -1,11 +1,5 @@
 <?php
-
-/*
- * Copied from the WordPress core 
- * under /wp-admin/includes/
- */
-
-namespace Billplz_CF7\Includes\Lib;
+namespace BillplzCF7\Lib;
 
 /**
  * Administration API: WP_List_Table class

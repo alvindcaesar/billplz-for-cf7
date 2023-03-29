@@ -1,26 +1,9 @@
 <?php
 
-/**
- * Billplz_CF7_Payment_DB
- *
- * This class contains methods that create the database table for
- * the payment datas.
- *
- * @package Billplz_For_CF7
- * @since   1.0.0
- */
-class Billplz_CF7_Payment_DB
-{
-    /**
-     * Run the database creation.
-     *
-     * @since 1.0.0
-     */
-    public static function up()
-    {
-        self::create_db();
-    }
+namespace BillplzCF7\Model;
 
+class PaymentDatabase
+{
     /**
      * Create the `wp_bcf7_payment` table.
      *
@@ -59,7 +42,6 @@ class Billplz_CF7_Payment_DB
 
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($query);
-
         }
     }
 }
