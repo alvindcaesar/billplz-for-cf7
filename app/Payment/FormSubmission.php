@@ -66,6 +66,7 @@ class FormSubmission
         'mode'           => $mode,
         'status'         => $status,
         'created_at'     => current_time('mysql'),
+        'paid_at'        => '0000-00-00 00:00:00',
       ),
     );
 
@@ -93,10 +94,8 @@ class FormSubmission
     $response = wp_remote_post($this->helpers->get_url() . "/api/v3/bills", $args);
     $apiBody = json_decode(wp_remote_retrieve_body($response));
     $bill_url = $apiBody->url;
-
-    $content  = '<div>';
-    $content .= '<p class="text-center">Redirecting to Billplz...</p>';
-    $content .= '</div>';
+    
+    $content = require_once BCF7_PLUGIN_PATH . "app/views/splash-page.php";
     $content .= '<script>window.location.replace("' . $bill_url . '");</script>';
 
     $allowed_tags = array('div' => array(), 'p' => array(), 'script' => array());
