@@ -17,6 +17,7 @@ final class Init
       Admin\ActionLink::class,
       Settings\API::class,
       Settings\General::class,
+      Settings\Email::class,
       Settings\Validation::class,
       Payment\ProcessRedirect::class,
       Payment\CallbackHandler::class,
@@ -51,7 +52,6 @@ final class Init
       }
     }
   }
-
 
   /**
    * Instantiates the provided class.
