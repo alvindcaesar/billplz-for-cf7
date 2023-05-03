@@ -14,8 +14,11 @@ class EmailConfirmation {
    * Email confirmation constructor.
    */
   public function __construct() {
-    $this->options = get_option( self::EMAIL_SETTINGS_OPTION );
+	  if ( null != get_option( self::EMAIL_SETTINGS_OPTION )) {
+		$this->options = get_option( self::EMAIL_SETTINGS_OPTION );
+	  }
   }
+  
 
   /**
    * Sends email confirmation.
@@ -49,5 +52,4 @@ class EmailConfirmation {
     $body = str_replace( '{transaction_amount}', 'RM ' . $transaction['txn_amount'], $body );
     return $body;
   }
-
 }
