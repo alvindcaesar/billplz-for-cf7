@@ -31,9 +31,7 @@ class EmailConfirmation {
     $body = $this->options[ self::EMAIL_BODY_OPTION ];
     $body = $this->replace_variables_in_email_body( $body, $transaction );
 
-    if ( '1' == $this->options[ self::EMAIL_SEND_PERMISSION ] ) {
-      wp_mail( $to, $subject, $body );
-    }
+    wp_mail( $to, $subject, $body );
   }
 
   /**
