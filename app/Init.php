@@ -15,6 +15,7 @@ final class Init
       Admin\Menu::class,
       Admin\BarMenu::class,
       Admin\ActionLink::class,
+      Admin\EnqueueScripts::class,
       Settings\API::class,
       Settings\General::class,
       Settings\Email::class,
