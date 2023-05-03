@@ -84,14 +84,28 @@ class Email
 
   public function email_subject_callback()
   {
+    $default       = 'Transaction Confirmation';
+    $subject_value = esc_attr(isset(self::$options['bcf7_email_subject']) ? self::$options['bcf7_email_subject'] : $default );
   ?>
-    <input class="regular-text" type="text" name="bcf7_email_settings[bcf7_email_subject]" id="bcf7_email_subject" value="<?php echo esc_attr(isset(self::$options['bcf7_email_subject']) ? self::$options['bcf7_email_subject'] : ""); ?>">
+    <input class="regular-text" type="text" name="bcf7_email_settings[bcf7_email_subject]" id="bcf7_email_subject" value="<?php echo $subject_value ?>">
   <?php
   }
 
   public function email_body_callback()
   {
-    $content = isset(self::$options['bcf7_email_body']) ? self::$options['bcf7_email_body'] : '';
+    $default = <<<BCF7_EMAIL_BODY
+      <div>
+        <p style="text-align: left;">Hello {customer_name},</p>
+        Your payment has been successfully completed. Here are your transaction details:
+        <p style="text-align: left;"><strong>Transaction ID:</strong> {transaction_id}</p>
+        <p style="text-align: left;"><strong>Date:</strong> {transaction_date}</p>
+        <p style="text-align: left;"><strong>Amount Paid:</strong> {transaction_amount}</p>
+        <p style="text-align: left;">Thank you for your business.</p>
+      </div>
+      &nbsp;
+    BCF7_EMAIL_BODY;
+
+    $content = isset(self::$options['bcf7_email_body']) ? self::$options['bcf7_email_body'] : $default;
 
     $settings = array(
       'textarea_name' => 'bcf7_email_settings[bcf7_email_body]',
