@@ -3,6 +3,7 @@
 namespace BillplzCF7\Admin;
 
 use BillplzCF7\Helpers\Functions;
+use WP_Admin_Bar;
 
 
 class BarMenu
@@ -19,7 +20,7 @@ class BarMenu
     add_action("admin_bar_menu", array($this, "menu"), 999);
   }
 
-  public function menu($admin_bar)
+  public function menu( WP_Admin_Bar $admin_bar )
   {
     if (!current_user_can('manage_options')) {
       return;
