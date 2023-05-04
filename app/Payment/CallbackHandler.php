@@ -17,8 +17,17 @@ class CallbackHandler
   {
     add_action("init", array($this, "redirect"));
     add_action("init", array($this, "callback"));
+    add_action('bcf7_payment_success', array($this, "send_email"));
   }
 
+  public function send_email($transactions)
+  {
+    $option = get_option('bcf7_email_settings');
+    if ($option && '1' == $option['bcf7_email_permission']) {
+      (new EmailConfirmation())->send( $transactions );
+    }
+  }
+  
   public function redirect()
   {
     if (empty($_GET) and (!isset($query['bcf7-listener']))) return;
@@ -86,16 +95,16 @@ class CallbackHandler
         ),
         array('ID' => $payment_id)
       );
-
-      $transactions = array(
+	
+	 $transactions = array(
         'customer_email' => $email,
         'customer_name' => $name,
         'txn_id' => $transaction_id,
         'txn_date' => $paid_at,
         'txn_amount' => $amount
-      );
-
-      (new EmailConfirmation())->send( $transactions );
+    ); 
+	
+	 do_action('bcf7_payment_success', $transactions);
 
     } elseif ((isset($_GET['bcf7-listener'])) and ($hash == $x_sign) and ('false' == $query['billplz']['paid'])) {
 
