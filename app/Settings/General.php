@@ -71,45 +71,56 @@ class General
 
   public function form_select_callback()
   {
-    $args        = array('post_type' => 'wpcf7_contact_form', 'posts_per_page' => -1);
-    $cf7_forms   = get_posts($args);
-    $form_ids    = wp_list_pluck($cf7_forms, 'ID');
-    $form_titles = wp_list_pluck($cf7_forms, 'post_title');
-    $ids_titles  = array_combine($form_ids, $form_titles);
-
-  ?>
+    $cf7_forms = get_posts(array(
+      'post_type' => 'wpcf7_contact_form',
+      'posts_per_page' => -1
+    ));
+    
+    $ids_titles = array();
+    
+    foreach ($cf7_forms as $form) {
+      $ids_titles[$form->ID] = esc_html($form->post_title) . ' (ID: ' . esc_html($form->ID) . ')';
+    }
+    
+    $selected_ids = array_map('intval', (array) (isset(self::$options['bcf7_form_select']) ? self::$options['bcf7_form_select'] : array()));
+    
+    ?>
     <select name='bcf7_general_settings[bcf7_form_select][]' id='bcf7_form_select' multiple="multiple" style="width: 350px; height: 150px;">
       <option value="">------------</option>
-      <?php foreach ($ids_titles as $id => $title) { ?>
-        <?php $selected = in_array($id, self::$options['bcf7_form_select']) ? ' selected="selected" ' : ''; ?>
-        <option value=<?php echo esc_attr($id) ?> <?php echo $selected; ?>>
-          <?php echo esc_html($title) . " (ID: " . esc_html($id) . ")"; ?>
-        </option><?php } ?>
+      <?php foreach ($ids_titles as $id => $title) : ?>
+        <?php $selected = in_array($id, $selected_ids); ?>
+        <option value="<?php echo esc_attr($id); ?>" <?php selected($selected); ?>>
+          <?php echo $title; ?>
+        </option>
+      <?php endforeach; ?>
     </select>
     <p class="description">Choose a Contact Form 7 form to use. Hold CTRL/CMD to select multiple forms. <br> <a href="<?php echo esc_url(admin_url("admin.php?page=wpcf7-new")); ?>">Click here</a> to create a new form.</p>
-  <?php
+    <?php
   }
 
-  public function redirect_page_callback()
-  {
-    $args        = array('post_type' => 'page', 'posts_per_page' => -1);
-    $pages       = get_posts($args);
-    $page_ids    = wp_list_pluck($pages, 'ID');
-    $page_titles = wp_list_pluck($pages, 'post_title');
-    $ids_titles  = array_combine($page_ids, $page_titles);
 
-  ?>
+  public function redirect_page_callback() 
+  {
+    $page_query_args = array('post_type' => 'page', 'posts_per_page' => -1);
+    $pages = get_posts($page_query_args);
+  
+    $page_ids = array_map(function($page) { return $page->ID; }, $pages);
+    $page_titles = array_map(function($page) { return $page->post_title; }, $pages);
+  
+    $ids_titles = array_combine($page_ids, $page_titles);
+    $redirect_page_id = self::$options['bcf7_redirect_page'] ?? '';
+  
+    ?>
     <select name='bcf7_general_settings[bcf7_redirect_page]' id='bcf7_redirect_page' style="width: 350px;">
       <option value="">-- Select a redirect page --</option>
-      <?php foreach ($ids_titles as $id => $title) {
-      ?>
-        <option value=<?php echo esc_attr($id) ?><?php isset(self::$options['bcf7_redirect_page']) ? selected($id, self::$options['bcf7_redirect_page'], true) : ""; ?>>
+      <?php foreach ($ids_titles as $id => $title) { ?>
+        <option value="<?php echo esc_attr($id) ?>" <?php selected($id, $redirect_page_id, true); ?>>
           <?php echo esc_html($title); ?>
         </option>
       <?php } ?>
     </select>
     <p class="description">Choose a page to redirect after payment completed. Default page: <strong>BCF7 Payment Confirmation</strong></p>
-    <p class="description">If you want to use a custom redirect page, make sure to add the <code>[bcf7_payment_confirmation]</code> shortcode inside the custom page's content.</p>
-  <?php
+    <p class="description">If you want to use a custom redirect page, make sure to add the <code id="bcf7-shortcode" style="cursor: pointer;" title="Click to copy ">[bcf7_payment_confirmation]</code> shortcode inside the custom page's content.</p>
+    <?php
   }
 }
