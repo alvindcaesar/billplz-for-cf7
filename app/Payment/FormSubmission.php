@@ -3,6 +3,7 @@
 namespace BillplzCF7\Payment;
 
 use BillplzCF7\Helpers\Functions;
+use Exception;
 use WPCF7_Submission;
 
 class FormSubmission
@@ -23,11 +24,15 @@ class FormSubmission
   public function process_data($contact_form)
   {
     $id = $contact_form->id();
+    $list_of_forms = $this->helpers->general_option("bcf7_form_select");
 
-    if (in_array($id, $this->helpers->general_option("bcf7_form_select"))) {
+    $setting_url = admin_url('admin.php?page=billplz-cf7&tab=general-settings');
+    if (empty($list_of_forms)) wp_die("The payment form is not specified. Please go to the <a href='$setting_url'>General Settings options page</a> to set the form.");
+
+    if ( in_array( $id, $list_of_forms )) {
       $submission = WPCF7_Submission::get_instance();
 
-      if ($submission) {
+      if ( $submission && isset( $_POST['bcf7-amount'] ) ) {
         $form_id        = $submission->get_contact_form()->id();
         $form_title     = $submission->get_contact_form()->title();
         $posted_data    = $submission->get_posted_data();
@@ -40,8 +45,8 @@ class FormSubmission
         $status         = 'pending';
 
         $payment_id = $this->record_data($form_id, $form_title, $name, $phone, $email, $amount, $transaction_id, $mode, $status);
-
-        $description = "Payment for $form_title";
+        
+        $description = apply_filters('bcf7_form_description', "Payment for $form_title");
         $this->process_payment($name, $email, $phone, $amount, $description, $payment_id);
       }
     }
@@ -94,9 +99,11 @@ class FormSubmission
     $response = wp_remote_post($this->helpers->get_url() . "/api/v3/bills", $args);
     $apiBody = json_decode(wp_remote_retrieve_body($response));
     $bill_url = $apiBody->url;
-    
-    $content = require_once BCF7_PLUGIN_PATH . "app/views/splash-page.php";
-    $content .= '<script>window.location.replace("' . $bill_url . '");</script>';
+
+    if ($bill_url) {
+      $content = require_once BCF7_PLUGIN_PATH . "app/views/splash-page.php";
+      $content .= '<script>window.location.replace("' . $bill_url . '");</script>';
+    }
 
     $allowed_tags = array('div' => array(), 'p' => array(), 'script' => array());
 
