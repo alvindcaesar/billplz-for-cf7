@@ -38,8 +38,6 @@ class ProcessRedirect
       $bill   = $data_array['bill_url'];
       $status = $data_array['status'];
 
-      sleep(3); // Give it a few seconds and wait for the payment to be updated in the background.
-
       if ("completed" == $status) {
 ?>
         <h2>Thank you for your payment!</h2>
@@ -49,7 +47,6 @@ class ProcessRedirect
         <p>Payment Status: <strong>Completed</strong></p>
         <p>Bill ID: <a href="<?php echo esc_url($bill); ?>" target="_blank"><?php echo esc_html($trx_id); ?></a></p>
       <?php
-
       } elseif (("pending" == $status) and ("true" == $_GET['billplz']['paid'])) {
         $bill_url = $this->helpers->get_url() . '/bills/' . ($_GET['billplz']['id']);
       ?>
