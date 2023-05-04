@@ -6,7 +6,6 @@ class EmailConfirmation {
   private const EMAIL_SETTINGS_OPTION = 'bcf7_email_settings';
   private const EMAIL_SUBJECT_OPTION = 'bcf7_email_subject';
   private const EMAIL_BODY_OPTION = 'bcf7_email_body';
-  private const EMAIL_SEND_PERMISSION = 'bcf7_email_permission';
 
   private array $options;
 
