@@ -79,9 +79,7 @@ class CallbackHandler
 
     sort($a);
 
-    $new     = implode("|", $a);
-
-    $hash    = hash_hmac('sha256', $new, $x_signature);
+    $hash    = hash_hmac('sha256', implode("|", $a), $x_signature);
 
     if (isset($_GET['bcf7-listener']) and ($hash == $x_sign) and ('true' == $query['billplz']['paid'])) {
 
@@ -158,9 +156,7 @@ class CallbackHandler
 
       sort($a);
 
-      $new = implode('|', $a);
-
-      $hash = hash_hmac('sha256', $new, $x_sign2);
+      $hash = hash_hmac('sha256', implode('|', $a), $x_sign2);
 
       global $wpdb;
       $table_name = $wpdb->prefix . "bcf7_payment";
