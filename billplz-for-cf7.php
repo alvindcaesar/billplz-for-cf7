@@ -22,7 +22,7 @@ if (file_exists( dirname(__FILE__) . '/vendor/autoload.php' ) ) {
 define("BCF7_PLUGIN_PATH", plugin_dir_path(__FILE__));
 define("BCF7_PLUGIN_URL", plugin_dir_url(__FILE__));
 define("BCF7_PLUGIN_FILE", plugin_basename(__FILE__));
-define("BCF7_ASSETS_URL", plugins_url('/billplz-for-cf7/assets/'));
+define("BCF7_ASSETS_URL", plugins_url('/billplz-for-contact-form-7/assets/'));
 define("BCF7_TEXT_DOMAIN", "billplz-for-cf7");
 define("BCF7_PLUGIN_VERSION", "1.2");
 
