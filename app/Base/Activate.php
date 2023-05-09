@@ -69,11 +69,9 @@ class Activate {
 		$query = new WP_Query( $args );
 		
 		if ( $query->have_posts() ) {
-			// Contact Form 7 form with the given title exists
 			wp_reset_postdata();
 			return;
 		} else {
-			// Contact Form 7 form with the given title does not exist
 			$post_data = array(
 				'post_title' => 'BCF7 Example Payment Form',
 				'post_content' => 'Payment Form Example',
@@ -83,7 +81,6 @@ class Activate {
 				'comment_status' => 'closed',
 			);
 		
-			// Insert the post into the database
 			$post_id = wp_insert_post($post_data);
 		
 			$form = '
