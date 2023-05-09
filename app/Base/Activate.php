@@ -21,8 +21,8 @@ class Activate {
 	public function activate() {
 		\BillplzCF7\Model\PaymentDatabase::create_db();
 		ob_start();
-		$this->create_pages();
-		$this->example_form();
+		$this->create_confirmation_page();
+		$this->create_example_form();
 		ob_end_clean();
 	}
 
@@ -31,7 +31,7 @@ class Activate {
 	 *
 	 * @return void
 	 */
-	private function create_pages() {
+	private function create_confirmation_page() {
 		$page_title   = esc_html__( 'BCF7 Payment Confirmation', BCF7_TEXT_DOMAIN );
 
 		$args = array(
@@ -57,37 +57,54 @@ class Activate {
 	 *
 	 * @return void
 	 */
-	private function example_form() {
-		$post_data = array(
-			'post_title' => 'BCF7 Example Payment Form',
-			'post_content' => 'Payment Form Example',
-			'post_status' => 'publish',
-			'post_author' => get_current_user_id(),
+	private function create_example_form() {
+
+		$args = array(
 			'post_type' => 'wpcf7_contact_form',
-			'comment_status' => 'closed',
+			'posts_per_page' => 1,
+			'post_status' => 'publish',
+			's' => 'BCF7 Example Payment Form'
 		);
-	
-		// Insert the post into the database
-		$post_id = wp_insert_post($post_data);
-	
-		$form = '
-		<label> Name
-			[text* bcf7-name] </label>
-	
-		<label> Your email
-			[email* bcf7-email] </label>
-	
-		<label> Phone
-			[tel* bcf7-phone] </label>
-	
-		<label> Amount (RM)
-			[number* bcf7-amount] </label>
-	
-	
-		[submit "Submit"]';
-	
-		add_post_meta($post_id, '_additional_settings', 'skip_mail: on');
-		add_post_meta($post_id, '_form', $form);
+		
+		$query = new WP_Query( $args );
+		
+		if ( $query->have_posts() ) {
+			// Contact Form 7 form with the given title exists
+			wp_reset_postdata();
+			return;
+		} else {
+			// Contact Form 7 form with the given title does not exist
+			$post_data = array(
+				'post_title' => 'BCF7 Example Payment Form',
+				'post_content' => 'Payment Form Example',
+				'post_status' => 'publish',
+				'post_author' => get_current_user_id(),
+				'post_type' => 'wpcf7_contact_form',
+				'comment_status' => 'closed',
+			);
+		
+			// Insert the post into the database
+			$post_id = wp_insert_post($post_data);
+		
+			$form = '
+			<label> Name
+				[text* bcf7-name] </label>
+		
+			<label> Your email
+				[email* bcf7-email] </label>
+		
+			<label> Phone
+				[tel* bcf7-phone] </label>
+		
+			<label> Amount (RM)
+				[number* bcf7-amount] </label>
+		
+		
+			[submit "Submit"]';
+		
+			add_post_meta($post_id, '_additional_settings', 'skip_mail: on');
+			add_post_meta($post_id, '_form', $form);
+		}
 	}
 
 	/**
