@@ -4,9 +4,9 @@ Author URI: https://alvindcaesar.com
 Plugin URI: https://github.com/alvindcaesar/billplz-for-contact-form-7
 Tags: e-commerce, payment-gateway, product, subscription, payment-forms
 Requires at least: 5.5
-Tested up to: 6.2
+Tested up to: 6.4.2
 Requires PHP: 7.4
-Stable tag: 1.2
+Stable tag: 1.2.0
 License: GNU Version 2 or Any Later Version
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
